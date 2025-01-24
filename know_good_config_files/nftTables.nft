@@ -1,0 +1,12 @@
+flush rulset
+table ip ccdc {
+        chain input {
+                type filter hook input priority filter; policy drop;
+                tcp dport 22 accept # SSH
+                tcp dport 53 accept # DNS
+                tcp dport {67, 68} # DHCP
+                tcp dport 80 accept # HTTP
+                tcp dport 443 accept # HTTPS
+                counter drop
+        }
+}
