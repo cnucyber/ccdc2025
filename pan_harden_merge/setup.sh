@@ -159,4 +159,3 @@ save_configuration
 
 echo "Palo Alto Network automation and hardening completed successfully!" | tee -a "$logfile"
 exit 0
-
