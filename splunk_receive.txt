@@ -1,0 +1,33 @@
+6. Splunk Web Interface Configuration for Receiving Logs (Splunk Setup)
+
+This section provides the necessary configuration steps for receiving logs in the Splunk Web Interface.
+Step 1: Log in to Splunk Web Interface
+
+    Open a browser and navigate to http://<SPLUNK_SERVER_IP>:8000.
+    Log in with your admin credentials (default: admin / changeme).
+
+Step 2: Configure Data Inputs to Receive Logs
+
+    In Splunk Web Interface, click on Settings (gear icon in the top-right corner).
+    Under Data, select Data Inputs.
+    Click Add Data and choose TCP as the data input type.
+    Set the Port to 9997 (default for receiving logs).
+    Under Source Type, either use the default or define custom source types like os_logs, auth_logs, etc.
+    Set Index to either main or create new custom indexes (os_logs, auth_logs, etc.).
+
+Step 3: Verify Incoming Data
+
+    Go to Search & Reporting and use a search query to check for incoming data:
+
+    index=os_logs | head 10
+
+    If logs are visible, they are being received successfully.
+
+Step 4: Set Up Alerts and Dashboards (Optional)
+
+    In Search & Reporting, create a search like:
+
+index=os_logs "error"
+
+Save the search and set it to trigger an alert if it matches conditions (e.g., more than 100 errors in 1 hour).
+You can also create dashboards to visualize log data.
