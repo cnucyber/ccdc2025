@@ -4,15 +4,15 @@
 
 echo "Starting Splunk Universal Forwarder setup..."
 
-# Ensure required tools are installed (wget, tar, unzip)
+# Ensure required tools are installed (wget, tar)
 if ! command -v wget &> /dev/null || ! command -v tar &> /dev/null; then
     echo "wget or tar is not installed. Installing..."
     apt-get update && apt-get install wget tar -y || { echo "Failed to install required tools"; exit 1; }
 fi
 
-# 1. Download the Splunk Universal Forwarder (replace with the actual correct download link)
+# 1. Download the Splunk Universal Forwarder with proper user-agent to handle redirects
 echo "Downloading Splunk Universal Forwarder..."
-wget -O /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz "https://download.splunk.com/releases/8.x.x/universalforwarder/splunkforwarder-8.x.x-linux-x86_64.tgz"
+wget --header="User-Agent: Mozilla/5.0" -O /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz "https://download.splunk.com/releases/8.x.x/universalforwarder/splunkforwarder-8.x.x-linux-x86_64.tgz"
 
 # Check if download was successful
 if [[ $? -ne 0 ]]; then
