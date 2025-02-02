@@ -14,12 +14,22 @@ fi
 echo "Downloading Splunk Universal Forwarder..."
 wget -O /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz "https://download.splunk.com/releases/8.x.x/universalforwarder/splunkforwarder-8.x.x-linux-x86_64.tgz"
 
+# Check if download was successful
+if [[ $? -ne 0 ]]; then
+    echo "Failed to download Splunk Universal Forwarder. Exiting..."
+    exit 1
+fi
+
 # 2. Verify the file type (to ensure it is .tgz)
 file_type=$(file -b /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz)
 
 if [[ $file_type == *"gzip compressed data"* ]]; then
     echo "Extracting Splunk Universal Forwarder (gzip format)..."
     tar -xzvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/
+    if [[ $? -ne 0 ]]; then
+        echo "Failed to extract Splunk Universal Forwarder. Exiting..."
+        exit 1
+    fi
 else
     echo "The downloaded file is not in the expected gzip format. Exiting..."
     exit 1
