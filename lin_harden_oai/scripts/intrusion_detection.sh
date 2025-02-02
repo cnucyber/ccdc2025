@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# INTRUSION DETECTION AND PREVENTION
+# INTRUSION DETECTION AND PREVENTION SETUP
 
 echo "Starting intrusion detection and prevention setup..."
 
@@ -11,19 +11,22 @@ echo "Starting intrusion detection and prevention setup..."
 echo "Installing and configuring Fail2ban..."
 
 # Install Fail2ban
-apt install fail2ban -y
+apt update && apt install fail2ban -y
 
 # Enable and start Fail2ban service
 systemctl enable fail2ban
 systemctl start fail2ban
 
 # Ensure Fail2ban is configured to protect SSH (default configuration)
-echo "[DEFAULT]" >> /etc/fail2ban/jail.local
-echo "bantime = 600" >> /etc/fail2ban/jail.local
-echo "findtime = 600" >> /etc/fail2ban/jail.local
-echo "maxretry = 3" >> /etc/fail2ban/jail.local
-echo "[sshd]" >> /etc/fail2ban/jail.local
-echo "enabled = true" >> /etc/fail2ban/jail.local
+cat <<EOL > /etc/fail2ban/jail.local
+[DEFAULT]
+bantime = 600
+findtime = 600
+maxretry = 3
+
+[sshd]
+enabled = true
+EOL
 
 # Restart fail2ban to apply changes
 systemctl restart fail2ban
@@ -62,10 +65,10 @@ apt install rkhunter -y
 rkhunter --update
 
 # Schedule rkhunter checks every 10 minutes using cron
-echo "*/10 * * * * root rkhunter --check" > /etc/cron.d/rkhunter
+echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
 
 # Run an initial rkhunter scan
-rkhunter --check
+rkhunter --check --skip-keypress
 
 echo "rkhunter installation and configuration completed!"
 
@@ -76,18 +79,29 @@ echo "rkhunter installation and configuration completed!"
 
 echo "Installing and configuring OSSEC (Host-based IDS)..."
 
-# Install OSSEC
-apt install ossec-hids -y
+# Install dependencies
+apt install curl unzip -y
+
+# Download OSSEC installer
+curl -L -o /tmp/ossec.tar.gz https://github.com/ossec/ossec-hids/archive/refs/tags/3.7.0.tar.gz
+
+# Extract the installer
+tar -xvzf /tmp/ossec.tar.gz -C /tmp/
+
+# Change directory to OSSEC source
+cd /tmp/ossec-hids-3.7.0/
+
+# Run the OSSEC installation script
+echo "Running OSSEC installation script..."
+yes "" | ./install.sh
 
 # Enable and start OSSEC service
 systemctl enable ossec
 systemctl start ossec
 
-# OSSEC is configured by default to monitor system logs for suspicious activity.
-# No email alerts configured as per user request.
-
 echo "OSSEC installation and configuration completed!"
 
-
+# ========================================
+# Intrusion Detection and Prevention Completed
+# ========================================
 echo "Intrusion detection and prevention setup completed successfully!"
-
