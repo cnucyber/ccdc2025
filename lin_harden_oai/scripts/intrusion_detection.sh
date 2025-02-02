@@ -80,7 +80,7 @@ echo "rkhunter installation and configuration completed!"
 echo "Installing and configuring OSSEC (Host-based IDS)..."
 
 # Install dependencies
-apt install curl unzip -y
+apt install curl unzip build-essential -y
 
 # Download OSSEC installer
 curl -L -o /tmp/ossec.tar.gz https://github.com/ossec/ossec-hids/archive/refs/tags/3.7.0.tar.gz
@@ -91,9 +91,20 @@ tar -xvzf /tmp/ossec.tar.gz -C /tmp/
 # Change directory to OSSEC source
 cd /tmp/ossec-hids-3.7.0/
 
-# Run the OSSEC installation script
-echo "Running OSSEC installation script..."
-yes "" | ./install.sh
+# Create an automated response file
+cat <<EOL > /tmp/ossec_install_answers
+server
+/var/ossec
+n
+y
+y
+y
+y
+y
+EOL
+
+# Run the OSSEC installation with automated answers
+./install.sh < /tmp/ossec_install_answers
 
 # Enable and start OSSEC service
 systemctl enable ossec
