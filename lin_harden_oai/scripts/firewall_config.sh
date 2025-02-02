@@ -45,7 +45,13 @@ iptables -A INPUT -m state --state INVALID -j DROP
 iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "Suspicious connection: "
 
 # Save firewall rules (for persistence across reboots)
-# On Debian/Ubuntu, use iptables-persistent or netfilter-persistent
+
+# Ensure /etc/iptables directory exists or create it
+if [ ! -d "/etc/iptables" ]; then
+    mkdir -p /etc/iptables
+fi
+
+# Save the firewall rules
 echo "Saving firewall rules..."
 iptables-save > /etc/iptables/rules_v4
 
@@ -53,4 +59,3 @@ iptables-save > /etc/iptables/rules_v4
 # service iptables save
 
 echo "Firewall configuration completed!"
-
