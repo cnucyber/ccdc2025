@@ -4,19 +4,33 @@
 
 echo "Starting Splunk Universal Forwarder setup..."
 
-# Ensure required tools are installed (wget, tar)
-if ! command -v wget &> /dev/null || ! command -v tar &> /dev/null; then
-    echo "wget or tar is not installed. Installing..."
-    apt-get update && apt-get install wget tar -y
+# Ensure required tools are installed (wget, tar, unzip)
+if ! command -v wget &> /dev/null || ! command -v tar &> /dev/null || ! command -v unzip &> /dev/null; then
+    echo "wget, tar, or unzip is not installed. Installing..."
+    apt-get update && apt-get install wget tar unzip -y || { echo "Failed to install required tools"; exit 1; }
 fi
 
 # 1. Download the Splunk Universal Forwarder (replace with actual download link)
 echo "Downloading Splunk Universal Forwarder..."
 wget -O /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz "https://download.splunk.com/releases/8.x.x/universalforwarder/splunkforwarder-8.x.x-linux-x86_64.tgz"
 
-# 2. Extract the downloaded tar file
-echo "Extracting Splunk Universal Forwarder..."
-tar -xvzf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/
+# 2. Verify the file type
+file_type=$(file -b /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz)
+
+# Check if the file is a .tgz, .tar, or .zip
+if [[ $file_type == *"gzip compressed data"* ]]; then
+    echo "Extracting Splunk Universal Forwarder (gzip format)..."
+    tar -xzvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/
+elif [[ $file_type == *"POSIX tar archive"* ]]; then
+    echo "Extracting Splunk Universal Forwarder (tar format)..."
+    tar -xvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/
+elif [[ $file_type == *"Zip archive data"* ]]; then
+    echo "Extracting Splunk Universal Forwarder (zip format)..."
+    unzip /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -d /opt/
+else
+    echo "The downloaded file is not in a supported format. Exiting..."
+    exit 1
+fi
 
 # 3. Start the Splunk Universal Forwarder
 echo "Starting Splunk Universal Forwarder..."
@@ -62,4 +76,3 @@ echo "Restarting Splunk Universal Forwarder..."
 /opt/splunkforwarder/bin/splunk restart
 
 echo "Splunk Universal Forwarder setup completed!"
-
