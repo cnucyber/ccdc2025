@@ -17,7 +17,7 @@ tar -xvzf /tmp/ossec.tar.gz -C /tmp/
 cd /tmp/ossec-hids-3.7.0/
 
 # Create expect script for OSSEC installation
-cat << 'EOF' > /tmp/ossec_install.expect
+cat <<EOF > /tmp/ossec_install.expect
 #!/usr/bin/expect -f
 
 spawn ./install.sh
@@ -34,4 +34,29 @@ send "n\r"
 expect "Do you want to run the integrity check daemon?"
 send "y\r"
 
-expect "Do you want t
+expect "Do you want to enable active response?"
+send "y\r"
+
+expect "Do you want to enable the firewall-drop response?"
+send "y\r"
+
+expect "Do you want to add the host to the centralized configuration?"
+send "y\r"
+
+expect "Press ENTER to continue"
+send "\r"
+
+expect eof
+EOF
+
+# Make the expect script executable
+chmod +x /tmp/ossec_install.expect
+
+# Run the expect script
+/tmp/ossec_install.expect
+
+# Enable and start OSSEC service
+systemctl enable ossec
+systemctl start ossec
+
+echo "OSSEC installation completed successfully!"
