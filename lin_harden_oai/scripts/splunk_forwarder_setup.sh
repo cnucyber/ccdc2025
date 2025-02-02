@@ -10,7 +10,7 @@ if ! command -v wget &> /dev/null || ! command -v tar &> /dev/null; then
     apt-get update && apt-get install wget tar -y || { echo "Failed to install required tools"; exit 1; }
 fi
 
-# 1. Download the Splunk Universal Forwarder (replace with actual download link)
+# 1. Download the Splunk Universal Forwarder (replace with the actual correct download link)
 echo "Downloading Splunk Universal Forwarder..."
 wget -O /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz "https://download.splunk.com/releases/8.x.x/universalforwarder/splunkforwarder-8.x.x-linux-x86_64.tgz"
 
@@ -21,17 +21,26 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # 2. Verify the file type (to ensure it is .tgz)
+echo "Verifying downloaded file type..."
 file_type=$(file -b /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz)
 
+echo "File type: $file_type"
+
+# Check if the file is a gzip compressed file
 if [[ $file_type == *"gzip compressed data"* ]]; then
     echo "Extracting Splunk Universal Forwarder (gzip format)..."
-    tar -xzvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/
-    if [[ $? -ne 0 ]]; then
-        echo "Failed to extract Splunk Universal Forwarder. Exiting..."
-        exit 1
-    fi
+    # Attempt extraction
+    tar -xzvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
+elif [[ $file_type == *"POSIX tar archive"* ]]; then
+    echo "Extracting Splunk Universal Forwarder (tar format)..."
+    # Attempt extraction if tar format is detected
+    tar -xvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
+elif [[ $file_type == *"Zip archive data"* ]]; then
+    echo "Extracting Splunk Universal Forwarder (zip format)..."
+    # Attempt extraction for zip files
+    unzip /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -d /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
 else
-    echo "The downloaded file is not in the expected gzip format. Exiting..."
+    echo "The downloaded file is not in a supported format. Exiting..."
     exit 1
 fi
 
