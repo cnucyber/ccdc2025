@@ -47,7 +47,7 @@ iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "Suspicious connect
 # Save firewall rules (for persistence across reboots)
 # On Debian/Ubuntu, use iptables-persistent or netfilter-persistent
 echo "Saving firewall rules..."
-iptables-save > /etc/iptables/rules.v4
+iptables-save > /etc/iptables/rules_v4
 
 # On CentOS/RedHat, you can use the following:
 # service iptables save
