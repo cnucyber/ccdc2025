@@ -4,8 +4,11 @@
 
 echo "Starting OSSEC automated installation..."
 
-# Install dependencies
-apt update && apt install -y curl unzip build-essential
+# Update package list
+apt update
+
+# Install necessary dependencies
+apt install -y curl unzip build-essential gcc make libpcre2-dev
 
 # Download OSSEC installer
 curl -L -o /tmp/ossec.tar.gz https://github.com/ossec/ossec-hids/archive/refs/tags/3.7.0.tar.gz
