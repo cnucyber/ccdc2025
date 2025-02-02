@@ -22,6 +22,10 @@ cat <<EOF > /tmp/ossec_install.expect
 
 spawn ./install.sh
 
+# Language selection (defaults to English)
+expect "en: English"
+send "en\r"
+
 expect "What kind of installation do you want?"
 send "server\r"
 
