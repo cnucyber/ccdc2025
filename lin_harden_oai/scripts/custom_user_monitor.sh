@@ -39,15 +39,13 @@ systemctl restart auditd || { echo "Failed to restart auditd"; exit 1; }
 # 4. Check for suspicious user activity and log it
 echo "Monitoring for suspicious activity..."
 
-# Run tail in the background to continue reading the logs
+# Run tail in the background to continuously monitor logs
 tail -f /var/log/auth.log | grep --line-buffered -E "sudo|useradd" | while read -r line; do
     echo "$(date +'%Y-%m-%d %H:%M:%S') - $line" >> $LOG_FILE
-done &  # Background the tail process to allow the script to continue
+done &  # Run the tail process in the background
 
 # Optionally, you can add a log message to confirm the background process is running
 echo "User activity monitoring is now running in the background. Logs are being written to $LOG_FILE."
 
-# Keep the script running so tail -f continues
-wait
-
-echo "User activity monitoring setup complete!"
+# Exit the script so you can run other commands
+echo "User activity monitoring setup complete. You can now use the terminal."
