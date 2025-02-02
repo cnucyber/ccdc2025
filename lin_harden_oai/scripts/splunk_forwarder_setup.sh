@@ -4,15 +4,42 @@
 
 echo "Starting Splunk Universal Forwarder setup..."
 
-# Ensure required tools are installed (wget, tar)
-if ! command -v wget &> /dev/null || ! command -v tar &> /dev/null; then
-    echo "wget or tar is not installed. Installing..."
-    apt-get update && apt-get install wget tar -y || { echo "Failed to install required tools"; exit 1; }
+# Ensure required tools are installed (wget, tar, unzip)
+if ! command -v wget &> /dev/null || ! command -v tar &> /dev/null || ! command -v unzip &> /dev/null; then
+    echo "wget, tar, or unzip is not installed. Installing..."
+    apt-get update && apt-get install wget tar unzip -y || { echo "Failed to install required tools"; exit 1; }
 fi
 
-# 1. Download the Splunk Universal Forwarder with proper user-agent to handle redirects
-echo "Downloading Splunk Universal Forwarder..."
-wget --header="User-Agent: Mozilla/5.0" -O /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz "https://download.splunk.com/releases/8.x.x/universalforwarder/splunkforwarder-8.x.x-linux-x86_64.tgz"
+# 1. Detect the Operating System and Architecture
+OS=$(uname -s)
+ARCH=$(uname -m)
+
+# Define the download URL based on OS and architecture
+if [[ "$OS" == "Linux" ]]; then
+    if [[ "$ARCH" == "x86_64" ]]; then
+        DOWNLOAD_URL="https://download.splunk.com/products/universalforwarder/releases/9.1.2/linux/splunkforwarder-9.1.2-b6b9c8185839-Linux-x86_64.tgz"
+    elif [[ "$ARCH" == "aarch64" ]]; then
+        DOWNLOAD_URL="https://download.splunk.com/products/universalforwarder/releases/9.1.2/linux/splunkforwarder-9.1.2-b6b9c8185839-Linux-armv8.tgz"
+    elif [[ "$ARCH" == "ppc64le" ]]; then
+        DOWNLOAD_URL="https://download.splunk.com/products/universalforwarder/releases/9.1.2/linux/splunkforwarder-9.1.2-b6b9c8185839-Linux-ppc64le.tgz"
+    elif [[ "$ARCH" == "s390x" ]]; then
+        DOWNLOAD_URL="https://download.splunk.com/products/universalforwarder/releases/9.1.2/linux/splunkforwarder-9.1.2-b6b9c8185839-Linux-s390x.tgz"
+    else
+        echo "Unsupported Linux architecture $ARCH. Exiting..."
+        exit 1
+    fi
+elif [[ "$OS" == "Darwin" ]]; then
+    DOWNLOAD_URL="https://download.splunk.com/products/universalforwarder/releases/9.1.2/osx/splunkforwarder-9.1.2-b6b9c8185839-darwin-universal2.tgz"
+elif [[ "$OS" == "FreeBSD" ]]; then
+    DOWNLOAD_URL="https://download.splunk.com/products/universalforwarder/releases/9.1.2/freebsd/splunkforwarder-9.1.2-b6b9c8185839-FreeBSD11-amd64.tgz"
+else
+    echo "Unsupported operating system $OS. Exiting..."
+    exit 1
+fi
+
+# 2. Download the Splunk Universal Forwarder
+echo "Downloading Splunk Universal Forwarder from $DOWNLOAD_URL..."
+wget --header="User-Agent: Mozilla/5.0" -O /tmp/splunkforwarder.tgz "$DOWNLOAD_URL"
 
 # Check if download was successful
 if [[ $? -ne 0 ]]; then
@@ -20,43 +47,23 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-# 2. Verify the file type (to ensure it is .tgz)
-echo "Verifying downloaded file type..."
-file_type=$(file -b /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz)
+# 3. Extract the downloaded file
+echo "Extracting Splunk Universal Forwarder..."
+tar -xzvf /tmp/splunkforwarder.tgz -C /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
 
-echo "File type: $file_type"
-
-# Check if the file is a gzip compressed file
-if [[ $file_type == *"gzip compressed data"* ]]; then
-    echo "Extracting Splunk Universal Forwarder (gzip format)..."
-    # Attempt extraction
-    tar -xzvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
-elif [[ $file_type == *"POSIX tar archive"* ]]; then
-    echo "Extracting Splunk Universal Forwarder (tar format)..."
-    # Attempt extraction if tar format is detected
-    tar -xvf /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -C /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
-elif [[ $file_type == *"Zip archive data"* ]]; then
-    echo "Extracting Splunk Universal Forwarder (zip format)..."
-    # Attempt extraction for zip files
-    unzip /tmp/splunkforwarder-8.x.x-linux-x86_64.tgz -d /opt/ || { echo "Failed to extract Splunk Universal Forwarder. Exiting..."; exit 1; }
-else
-    echo "The downloaded file is not in a supported format. Exiting..."
-    exit 1
-fi
-
-# 3. Start the Splunk Universal Forwarder
+# 4. Start the Splunk Universal Forwarder
 echo "Starting Splunk Universal Forwarder..."
 cd /opt/splunkforwarder/bin
 ./splunk start --accept-license
 
-# 4. Enable Splunk to start on boot
+# 5. Enable Splunk to start on boot
 echo "Enabling Splunk Universal Forwarder to start on boot..."
 ./splunk enable boot-start
 
-# 5. Prompt the user for the Splunk server IP
+# 6. Prompt the user for the Splunk server IP
 read -p "Enter the IP address of the Splunk server: " splunk_server_ip
 
-# 6. Configure the Forwarder to Send Logs
+# 7. Configure the Forwarder to Send Logs
 echo "Configuring Splunk Forwarder inputs..."
 
 cat <<EOL > /opt/splunkforwarder/etc/system/local/inputs.conf
@@ -73,7 +80,7 @@ disabled = false
 index = custom_logs
 EOL
 
-# 7. Define the destination Splunk server with the user-provided IP
+# 8. Define the destination Splunk server with the user-provided IP
 echo "Configuring Splunk Forwarder outputs..."
 cat <<EOL > /opt/splunkforwarder/etc/system/local/outputs.conf
 [tcpout]
@@ -83,7 +90,7 @@ defaultGroup = default-autolb-group
 server = $splunk_server_ip:9997
 EOL
 
-# 8. Restart the Splunk Universal Forwarder to apply changes
+# 9. Restart the Splunk Universal Forwarder to apply changes
 echo "Restarting Splunk Universal Forwarder..."
 /opt/splunkforwarder/bin/splunk restart
 
