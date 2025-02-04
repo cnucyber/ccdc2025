@@ -19,7 +19,7 @@ while read IP; do
     iptables -A INPUT -s $IP -j DROP
 
     # Send an alert about the blocked IP
-    echo "Blocked IP address $IP for suspicious network activity." | mail -s "Suspicious Network Activity Detected" admin@example.com
+    echo "Blocked IP address $IP for suspicious network activity."
 done < $BLOCK_LIST
 
 echo "Suspicious network activity detection and response completed!"
