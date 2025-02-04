@@ -4,87 +4,114 @@
 
 echo "Starting system hardening..."
 
-# 1. Disable unused filesystems
+# ========================================
+# 1. Ensure necessary security packages are installed
+# ========================================
+echo "Installing security-related packages..."
+apt-get update && apt-get install -y libpam-pwquality || { echo "Failed to install security packages"; exit 1; }
+
+# ========================================
+# 2. Disable unused filesystems
+# ========================================
 echo "Disabling unused filesystems..."
 if [ ! -f /etc/modprobe.d/disable.conf ]; then
-    echo "Creating /etc/modprobe.d/disable.conf..."
     touch /etc/modprobe.d/disable.conf
 fi
 
-# Disable specific filesystems by installing them as "true" (effectively disabling them)
+# Disable specific filesystems
 for fs in cramfs freevxfs jffs2 hfs hfsplus squashfs; do
-    echo "install $fs /bin/true" >> /etc/modprobe.d/disable.conf
+    if ! grep -q "^install $fs /bin/true" /etc/modprobe.d/disable.conf; then
+        echo "install $fs /bin/true" >> /etc/modprobe.d/disable.conf
+    fi
 done
 
-# 2. Disable IPv6 if not required
+# ========================================
+# 3. Disable IPv6 if not required
+# ========================================
 echo "Disabling IPv6..."
-if ! grep -q "net.ipv6.conf.all.disable_ipv6 = 1" /etc/sysctl.conf; then
-    echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+sysctl_conf="/etc/sysctl.conf"
+if ! grep -q "net.ipv6.conf.all.disable_ipv6 = 1" "$sysctl_conf"; then
+    echo "net.ipv6.conf.all.disable_ipv6 = 1" >> "$sysctl_conf"
 fi
-if ! grep -q "net.ipv6.conf.default.disable_ipv6 = 1" /etc/sysctl.conf; then
-    echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+if ! grep -q "net.ipv6.conf.default.disable_ipv6 = 1" "$sysctl_conf"; then
+    echo "net.ipv6.conf.default.disable_ipv6 = 1" >> "$sysctl_conf"
 fi
 sysctl -p
 
-# 3. Disable root SSH login
+# ========================================
+# 4. Disable root SSH login
+# ========================================
 echo "Disabling root SSH login..."
-if grep -q "^PermitRootLogin" /etc/ssh/sshd_config; then
-    sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+ssh_config="/etc/ssh/sshd_config"
+if grep -q "^PermitRootLogin" "$ssh_config"; then
+    sed -i 's/^PermitRootLogin .*/PermitRootLogin no/' "$ssh_config"
 else
-    echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+    echo "PermitRootLogin no" >> "$ssh_config"
 fi
 systemctl restart sshd
 
-# 4. Lock password aging for system accounts (UID < 1000)
+# ========================================
+# 5. Lock password aging for system accounts (UID < 1000)
+# ========================================
 echo "Locking password aging for system accounts..."
-for user in $(cut -f1 -d: /etc/passwd); do
-    user_uid=$(grep "^$user:" /etc/passwd | cut -d: -f3)
-    if [ "$user_uid" -lt 1000 ]; then
-        chage -E 0 $user
+while IFS=: read -r user _ uid _; do
+    if [ "$uid" -lt 1000 ]; then
+        chage -E 0 "$user"
     fi
-done
+done < /etc/passwd
 
-# 5. Enforce password complexity
-echo "Setting password complexity..."
-if ! grep -q "pam_pwquality.so" /etc/pam.d/common-password; then
-    echo "password requisite pam_pwquality.so retry=3 minlen=12 difok=4" >> /etc/pam.d/common-password
+# ========================================
+# 6. Enforce password complexity
+# ========================================
+echo "Setting password complexity policy..."
+pam_file="/etc/pam.d/common-password"
+
+if [[ -f "/usr/lib/security/pam_pwquality.so" ]]; then
+    if ! grep -q "pam_pwquality.so" "$pam_file"; then
+        echo "password requisite pam_pwquality.so retry=3 minlen=12 difok=4" >> "$pam_file"
+    fi
+else
+    echo "Warning: pam_pwquality.so module not found. Skipping password complexity enforcement."
 fi
 
-# 6. Set umask to restrict permissions
+# ========================================
+# 7. Set default umask
+# ========================================
 echo "Setting default umask..."
-if ! grep -q "umask 027" /etc/profile; then
-    echo "umask 027" >> /etc/profile
+profile_file="/etc/profile"
+if ! grep -q "umask 027" "$profile_file"; then
+    echo "umask 027" >> "$profile_file"
 fi
 
-# 7. Disable accounts with weak passwords
-echo "Disabling accounts with weak passwords..."
+# ========================================
+# 8. Disable accounts with weak passwords
+# ========================================
+echo "Checking for weak passwords and locking accounts..."
 
-# Set minimum password length to 12 characters
 MIN_PASSWORD_LENGTH=12
 
-# Loop through all user accounts and check their password length
-for user in $(cut -f1 -d: /etc/passwd); do
-    # Skip system users with UID < 1000
-    user_uid=$(grep "^$user:" /etc/passwd | cut -d: -f3)
-    if [ "$user_uid" -lt 1000 ]; then
-        continue
-    fi
-    
-    # Check password status using the "passwd -S" command
-    password_status=$(passwd -S $user | awk '{print $2}')
-    
-    if [ "$password_status" != "L" ]; then
-        # Check password strength by looking for length
-        password_length=$(echo "$user" | awk '{print length($1)}')
-        
-        if [ "$password_length" -lt "$MIN_PASSWORD_LENGTH" ]; then
-            # Lock the account if the password is weak
-            passwd -l $user
-            echo "Account $user disabled due to weak password."
+while IFS=: read -r user _ uid _; do
+    if [ "$uid" -ge 1000 ]; then
+        shadow_entry=$(grep "^$user:" /etc/shadow)
+        if [[ -n "$shadow_entry" ]]; then
+            password_hash=$(echo "$shadow_entry" | cut -d: -f2)
+            
+            # Skip users with locked accounts
+            if [[ "$password_hash" == "!" || "$password_hash" == "*" ]]; then
+                continue
+            fi
+
+            # Check password length
+            password_length=$(echo "$password_hash" | wc -c)
+            if [ "$password_length" -lt "$MIN_PASSWORD_LENGTH" ]; then
+                passwd -l "$user"
+                echo "Account $user disabled due to weak password."
+            fi
         fi
     fi
-done
+done < /etc/passwd
 
-# 8. Apply changes and finalize hardening
-echo "System hardening completed!"
-
+# ========================================
+# 9. Apply changes and finalize hardening
+# ========================================
+echo "System hardening completed successfully!"
