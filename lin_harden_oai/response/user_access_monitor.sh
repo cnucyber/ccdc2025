@@ -26,7 +26,7 @@ while read USER; do
         iptables -A INPUT -s $ATTACKING_IP -j DROP
 
         # Send an alert
-        echo "Suspicious user $USER detected and account locked." | mail -s "Unauthorized User Access Detected" admin@example.com
+        echo "Suspicious user $USER detected and account locked."
     fi
 done < $BLOCK_LIST
 
