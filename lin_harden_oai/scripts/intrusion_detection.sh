@@ -61,14 +61,29 @@ echo "Installing and configuring rkhunter (Rootkit Hunter)..."
 # Install rkhunter
 apt install rkhunter -y
 
-# Update rkhunter database
-rkhunter --update
+# Prompt the user if they want to run rkhunter
+read -p "Do you want to run Rootkit Hunter (rkhunter)? (y/n, default to n): " RUN_RK_HUNTER
 
-# Schedule rkhunter checks every 10 minutes using cron
-echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
+# Default to 'n' if no input is given
+RUN_RK_HUNTER=${RUN_RK_HUNTER:-n}
 
-# Run an initial rkhunter scan
-rkhunter --check --skip-keypress
+# If the user agrees to run rkhunter
+if [[ "$RUN_RK_HUNTER" =~ ^[Yy]$ ]]; then
+    # Update rkhunter database
+    rkhunter --update
+
+    # Run an initial rkhunter scan
+    rkhunter --check --skip-keypress
+
+    echo "rkhunter scan completed."
+else
+    echo "Skipping rkhunter scan."
+fi
+
+# Schedule rkhunter checks every 10 minutes using cron (if user agreed to run it)
+if [[ "$RUN_RK_HUNTER" =~ ^[Yy]$ ]]; then
+    echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
+fi
 
 echo "rkhunter installation and configuration completed!"
 
