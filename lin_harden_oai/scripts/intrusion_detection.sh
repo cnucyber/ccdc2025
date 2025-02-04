@@ -80,10 +80,10 @@ else
     echo "Skipping rkhunter scan."
 fi
 
-# Schedule rkhunter checks every 10 minutes using cron (if user agreed to run it)
-if [[ "$RUN_RK_HUNTER" =~ ^[Yy]$ ]]; then
-    echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
-fi
+# # Schedule rkhunter checks every 10 minutes using cron (if user agreed to run it)
+# if [[ "$RUN_RK_HUNTER" =~ ^[Yy]$ ]]; then
+#     echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
+# fi
 
 echo "rkhunter installation and configuration completed!"
 
