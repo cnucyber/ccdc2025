@@ -24,7 +24,7 @@ if grep -q "$SUSPICIOUS_FILE" $AIDE_REPORT; then
     iptables -A INPUT -s $ATTACKING_IP -j DROP
 
     # Send an alert
-    echo "Suspicious file modification detected and response triggered. File restored from backup." | mail -s "Suspicious File Modification" admin@example.com
+    echo "Suspicious file modification detected and response triggered. File restored from backup."
 else
     echo "No suspicious file modification detected."
 fi
