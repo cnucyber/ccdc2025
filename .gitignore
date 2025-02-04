@@ -1,0 +1,3 @@
+
+# Prevent testing files being uploaded to git
+*.log
