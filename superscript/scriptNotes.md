@@ -1,5 +1,6 @@
 # Created by Dr.Void
 
 # Logs
-Name: hostname.log
-Format: hostname@time | info
+- Name: hostname.log
+- Format:|type|hostname@time| info
+- 4 types: info, success, warn, and critical.

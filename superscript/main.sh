@@ -8,4 +8,7 @@ source "./common/scriptLoger.sh"
 
 green_text "Source dir: $src_dir"
 create_log
-add_log "Source dir: $src_dir"
+add_log_info "Source dir: $src_dir"
+add_log_success "Success"
+add_log_warn "Warning"
+add_log_critical "Critical"
