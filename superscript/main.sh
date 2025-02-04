@@ -4,5 +4,8 @@
 
 # sourcing files
 source "./common/basicFunctions.sh"
+source "./common/scriptLoger.sh"
 
-green_text "$src_dir"
+green_text "Source dir: $src_dir"
+create_log
+add_log "Source dir: $src_dir"
