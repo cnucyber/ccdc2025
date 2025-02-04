@@ -20,7 +20,7 @@ for PROCESS in "${MALICIOUS_PROCESSES[@]}"; do
         done
 
         # Send an alert
-        echo "Malicious process $PROCESS terminated" | mail -s "Malicious Process Detected" admin@example.com
+        echo "Malicious process $PROCESS terminated"
     fi
 done
 
