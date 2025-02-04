@@ -1,119 +1,120 @@
 #!/bin/bash
 
-# CUSTOM USER MONITORING SCRIPT
-# This script integrates with AIDE to monitor suspicious user activity, including unauthorized user creation or modification of critical system files.
+# ==========================================
+# SYSTEM-WIDE USER COMMAND MONITORING & SECURITY AUDITING
+# ==========================================
+# This script continuously monitors:
+# - Commands executed by ALL users in real-time
+# - User logins (failed/successful)
+# - Unauthorized user creations/modifications
+# - Suspicious user activity (sudo, passwd changes, privilege escalation)
+# - File integrity (AIDE)
+# - Log rotation & alerting
 
-# Settings
-LOG_FILE="/var/log/user_activity.log"       # Log file for all activities
-ALERT_FILE="/var/log/user_alerts.log"       # Alert log file for suspicious activity
-MONITOR_DIR="/var/log"                      # Directory to monitor logs
-MONITOR_FILE="$MONITOR_DIR/auth.log"        # Log file to monitor for activity
-THRESHOLD_FAILED_LOGINS=5                   # Number of failed logins before alerting
-ALERT_THRESHOLD_TIME=60                     # Time period (in seconds) for checking login attempts
-AIDE_REPORT="/var/log/aide/aide_report.txt"  # Location of AIDE's report
+# CONFIGURATION
+LOG_FILE="/var/log/user_activity.log"      # General activity log
+ALERT_FILE="/var/log/user_alerts.log"      # Suspicious activity alerts
+AIDE_REPORT="/var/log/aide/aide_report.txt" # AIDE report for file integrity monitoring
+MONITOR_FILE="/var/log/auth.log"           # Authentication log for tracking logins
+ENABLE_COMMAND_ECHO=true                    # Enable/Disable real-time command logging
+EMAIL_ALERTS=false                         # Set to 'true' to enable email alerts
+ADMIN_EMAIL="admin@example.com"            # Change this to the actual admin email
+LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
 
-# Ensure necessary log files exist
-if [ ! -f "$LOG_FILE" ]; then
-    touch "$LOG_FILE"
-    echo "Created log file: $LOG_FILE"
-fi
+# Ensure required commands exist
+command -v auditctl &> /dev/null || { echo "Error: auditd is not installed. Install with: sudo apt install auditd"; exit 1; }
 
-if [ ! -f "$ALERT_FILE" ]; then
-    touch "$ALERT_FILE"
-    echo "Created alert file: $ALERT_FILE"
-fi
+# ==========================================
+# FUNCTION: Log messages with timestamps
+# ==========================================
+log_event() {
+    local level="$1"
+    local message="$2"
+    local timestamp
+    timestamp=$(date +'%Y-%m-%d %H:%M:%S')
 
-# ========================================
-# 1. Monitor for Failed Login Attempts
-# ========================================
-echo "Starting to monitor failed login attempts..."
+    # Print to terminal with color
+    case "$level" in
+        INFO) echo -e "\e[1;34m[$timestamp] [INFO] $message\e[0m" ;;
+        ALERT) echo -e "\e[1;31m[$timestamp] [ALERT] $message\e[0m" ;;
+        COMMAND) echo -e "\e[1;32m[$timestamp] [COMMAND] $message\e[0m" ;;
+        *) echo -e "\e[1;33m[$timestamp] [UNKNOWN] $message\e[0m" ;;
+    esac
 
-failed_logins() {
-    # Monitor failed login attempts and log alerts if exceeded threshold
-    grep "Failed password" "$MONITOR_FILE" | awk '{print $(NF-3)}' | sort | uniq -c | awk -v threshold="$THRESHOLD_FAILED_LOGINS" '$1 >= threshold' | while read -r count ip; do
-        timestamp=$(date +'%Y-%m-%d %H:%M:%S')
-        echo "$timestamp - ALERT: Multiple failed login attempts from $ip ($count attempts)" >> "$ALERT_FILE"
-        echo -e "\e[1;31m[ALERT] Multiple failed login attempts from $ip ($count attempts)\e[0m"
+    # Write to log files
+    echo "$timestamp [$level] $message" >> "$LOG_FILE"
+    [[ "$level" == "ALERT" ]] && echo "$timestamp [$level] $message" >> "$ALERT_FILE"
+
+    # Send email alert (optional)
+    if [[ "$EMAIL_ALERTS" == true && "$level" == "ALERT" ]]; then
+        echo "$message" | mail -s "[SECURITY ALERT] $message" "$ADMIN_EMAIL"
+    fi
+}
+
+# ==========================================
+# FUNCTION: Capture ALL User Commands in Real-Time
+# ==========================================
+monitor_all_user_commands() {
+    if [[ "$ENABLE_COMMAND_ECHO" == true ]]; then
+        log_event "INFO" "Monitoring all executed commands system-wide..."
+
+        # Configure audit rules to log ALL command executions via execve
+        auditctl -D
+        auditctl -a always,exit -F arch=b64 -S execve -k command_exec
+        auditctl -a always,exit -F arch=b32 -S execve -k command_exec
+
+        # Monitor the audit log for executed commands
+        tail -Fn0 /var/log/audit/audit.log | while read -r line; do
+            if echo "$line" | grep -q "execve"; then
+                timestamp=$(date +'%Y-%m-%d %H:%M:%S')
+                user_id=$(echo "$line" | grep -oP 'uid=\K[0-9]+' | head -1)
+                command=$(echo "$line" | grep -oP 'a0="[^"]+"' | cut -d '"' -f2)
+                full_command=$(echo "$line" | grep -oP 'a[0-9]="[^"]+"' | tr '\n' ' ' | sed 's/a[0-9]="//g' | sed 's/"//g')
+
+                username=$(getent passwd "$user_id" | cut -d: -f1)
+                [[ -z "$username" ]] && username="Unknown"
+
+                log_event "COMMAND" "User [$username] executed command: $full_command"
+            fi
+        done
+    else
+        log_event "INFO" "Command monitoring is disabled."
+    fi
+}
+
+# ==========================================
+# FUNCTION: Monitor Suspicious User Activity
+# ==========================================
+monitor_suspicious_activity() {
+    log_event "INFO" "Monitoring suspicious user activity..."
+    tail -Fn0 "$MONITOR_FILE" | grep --line-buffered -E "sudo|useradd|passwd|groupadd|usermod" | while read -r line; do
+        user=$(echo "$line" | awk '{print $NF}')
+        log_event "ALERT" "Suspicious activity detected: $line"
     done
 }
 
-# ========================================
-# 2. Monitor Suspicious User Activity Using AIDE Reports
-# ========================================
-echo "Starting to monitor suspicious user activity..."
-
-monitor_suspicious_user_activity() {
-    # Monitor the AIDE report for unauthorized changes to critical files
-    tail -f "$AIDE_REPORT" | while read -r line; do
-        # Look for suspicious file changes (e.g., passwd, shadow, etc.)
-        if echo "$line" | grep -qE '(/etc/passwd|/etc/shadow|/etc/group|/etc/sudoers)'; then
-            timestamp=$(date +'%Y-%m-%d %H:%M:%S')
-            echo "$timestamp - ALERT: Suspicious activity detected: $line" >> "$ALERT_FILE"
-            echo -e "\e[1;33m[ALERT] Suspicious file modification detected: $line\e[0m"
-            echo "$timestamp - Suspicious file modification detected: $line"
-        fi
-    done
-}
-
-# ========================================
-# 3. Monitor User Creation and Modifications
-# ========================================
-echo "Starting to monitor user creation and modifications..."
-
-monitor_user_creation() {
-    # Monitor user creation and modifications in the log file
-    tail -f "$MONITOR_FILE" | grep --line-buffered -E "useradd|usermod|groupadd|passwd" | while read -r line; do
-        timestamp=$(date +'%Y-%m-%d %H:%M:%S')
-        
-        # Log user modifications or creation
-        echo "$timestamp - User modification detected: $line" >> "$LOG_FILE"
-        echo -e "\e[1;34m[INFO] User modification detected: $line\e[0m"
-    done
-}
-
-# ========================================
-# 4. Apply User Activity Monitoring in Parallel
-# ========================================
-echo "User activity monitoring is now running in parallel for failed login attempts, suspicious activity, and user modifications..."
-
-failed_logins &  # Run failed login monitoring in the background
-monitor_suspicious_user_activity &  # Run suspicious user activity monitoring in the background
-monitor_user_creation &  # Run user creation/modification monitoring in the background
-
-# ========================================
-# 5. Monitor and Clean Up Old Logs Periodically
-# ========================================
-cleanup_old_logs() {
-    # Clean up alert and log files periodically to avoid large file sizes
-    MAX_LOG_SIZE=1000000  # 1MB in bytes
-
+# ==========================================
+# FUNCTION: Rotate Logs When Exceeding Size Limit
+# ==========================================
+rotate_logs() {
     while true; do
-        sleep 3600  # Every hour
-
-        log_size=$(stat --format=%s "$LOG_FILE")
-        alert_size=$(stat --format=%s "$ALERT_FILE")
-
-        if [ "$log_size" -gt "$MAX_LOG_SIZE" ]; then
-            echo "Log file exceeded size limit, rotating log..."
-            mv "$LOG_FILE" "$LOG_FILE.old"
-            touch "$LOG_FILE"
-            echo "Log file rotated. Previous log saved as $LOG_FILE.old."
-        fi
-
-        if [ "$alert_size" -gt "$MAX_LOG_SIZE" ]; then
-            echo "Alert file exceeded size limit, rotating alert log..."
-            mv "$ALERT_FILE" "$ALERT_FILE.old"
-            touch "$ALERT_FILE"
-            echo "Alert log rotated. Previous log saved as $ALERT_FILE.old."
-        fi
+        sleep 3600  # Check every hour
+        for file in "$LOG_FILE" "$ALERT_FILE"; do
+            if [[ -f "$file" ]] && [[ $(stat --format=%s "$file") -ge $LOG_SIZE_LIMIT ]]; then
+                mv "$file" "$file.old"
+                touch "$file"
+                log_event "INFO" "Rotated log file: $file"
+            fi
+        done
     done
 }
 
-# ========================================
-# 6. Final Notification
-# ========================================
-echo "User activity monitoring setup complete."
-echo "Monitoring started in the background for failed login attempts, suspicious activity, user modifications, and log rotation."
+# ==========================================
+# START MONITORING FUNCTIONS IN BACKGROUND
+# ==========================================
+log_event "INFO" "Starting full system-wide user command monitoring..."
+monitor_all_user_commands &  # Capture commands from ALL users
+monitor_suspicious_activity &  # Track privilege escalations and user modifications
+rotate_logs &  # Prevent log overflow
 
-# Start log cleanup in the background
-cleanup_old_logs &
+log_event "INFO" "Monitoring system is now running in the background."
