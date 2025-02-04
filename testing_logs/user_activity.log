@@ -1,0 +1,258 @@
+2025-02-02 01:42:45 - 2025-02-02T01:41:41.170789+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=/usr/bin/chmod +x init.sh
+2025-02-02 01:42:45 - 2025-02-02T01:41:41.172731+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 01:42:45 - 2025-02-02T01:41:41.187745+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 01:42:45 - 2025-02-02T01:42:03.443970+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./init.sh
+2025-02-02 01:42:46 - 2025-02-02T01:42:03.445277+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:45:31 - 2025-02-02T02:43:10.090219+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/bin/tail -f /var/ossec/logs/alerts/alerts.log
+2025-02-02 02:45:31 - 2025-02-02T02:43:10.096208+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:45:31 - 2025-02-02T02:43:39.102950+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 02:45:32 - 2025-02-02T02:45:25.111447+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./custom_system_monitor.sh
+2025-02-02 02:45:32 - 2025-02-02T02:45:25.117970+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:45:32 - 2025-02-02T02:45:25.137878+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 02:45:32 - 2025-02-02T02:45:31.442670+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./custom_user_monitor.sh
+2025-02-02 02:45:32 - 2025-02-02T02:45:31.446206+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:59:37 - 2025-02-02T02:56:22.047782+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:59:37 - 2025-02-02T02:56:22.355743+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 02:59:37 - 2025-02-02T02:56:26.425206+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./firewall_config.sh
+2025-02-02 02:59:37 - 2025-02-02T02:56:26.430060+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:59:37 - 2025-02-02T02:56:26.796886+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 02:59:37 - 2025-02-02T02:59:01.409961+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./firewall_config.sh
+2025-02-02 02:59:37 - 2025-02-02T02:59:01.417952+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 02:59:37 - 2025-02-02T02:59:01.809853+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 02:59:37 - 2025-02-02T02:59:37.249952+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./custom_user_monitor.sh
+2025-02-02 02:59:37 - 2025-02-02T02:59:37.253696+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:00:36 - 2025-02-02T03:00:36.050069+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:01:07 - 2025-02-02T03:01:07.860839+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./custom_user_monitor.sh
+2025-02-02 03:01:07 - 2025-02-02T03:01:07.869612+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:01:08 - 2025-02-02T03:00:36.050069+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:01:08 - 2025-02-02T03:01:08.813353+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:01:08 - 2025-02-02T03:01:07.860839+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./custom_user_monitor.sh
+2025-02-02 03:01:08 - 2025-02-02T03:01:07.869612+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:01:08 - 2025-02-02T03:01:08.813353+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:01:31 - 2025-02-02T03:01:31.486771+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./backup.sh
+2025-02-02 03:01:31 - 2025-02-02T03:01:31.486771+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./backup.sh
+2025-02-02 03:01:31 - 2025-02-02T03:01:31.501707+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:01:31 - 2025-02-02T03:01:31.501707+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:01:31 - 2025-02-02T03:01:31.772955+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:01:31 - 2025-02-02T03:01:31.772955+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:02:03 - 2025-02-02T03:02:03.127492+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./log_rotation.sh
+2025-02-02 03:02:03 - 2025-02-02T03:02:03.127492+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./log_rotation.sh
+2025-02-02 03:02:03 - 2025-02-02T03:02:03.128553+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:02:03 - 2025-02-02T03:02:03.128553+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:02:03 - 2025-02-02T03:02:03.263392+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:02:03 - 2025-02-02T03:02:03.263392+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:02:20 - 2025-02-02T03:02:20.217169+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./system_hardening.sh
+2025-02-02 03:02:20 - 2025-02-02T03:02:20.217169+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./system_hardening.sh
+2025-02-02 03:02:20 - 2025-02-02T03:02:20.241720+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:02:20 - 2025-02-02T03:02:20.241720+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:02:25 - 2025-02-02T03:02:25.072466+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:02:25 - 2025-02-02T03:02:25.072466+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.574894+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.574894+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.576205+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.576205+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.576931+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/bin/passwd -u ccdc
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.576931+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/bin/passwd -u ccdc
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.589712+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.589712+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.678338+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:03:21 - 2025-02-02T03:03:21.678338+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.495857+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.495857+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.500293+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.500293+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.501436+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./response_workflow.sh
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.516787+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.501436+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./response_workflow.sh
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.592614+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.516787+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:04:23 - 2025-02-02T03:04:23.592614+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.833334+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.833334+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.833603+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.833603+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.839150+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/response ; USER=root ; COMMAND=/usr/bin/chmod 755 brute_force_detection.sh file_integrity_monitor.sh malicious_process_detection.sh network_activity_monitor.sh user_access_monitor.sh
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.842707+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.839150+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/response ; USER=root ; COMMAND=/usr/bin/chmod 755 brute_force_detection.sh file_integrity_monitor.sh malicious_process_detection.sh network_activity_monitor.sh user_access_monitor.sh
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.874243+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.842707+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:04:52 - 2025-02-02T03:04:52.874243+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:05:00 - 2025-02-02T03:05:00.915916+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:05:00 - 2025-02-02T03:05:00.915916+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:05:01 - 2025-02-02T03:05:00.918331+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:05:01 - 2025-02-02T03:05:00.918331+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:05:01 - 2025-02-02T03:05:00.922706+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./response_workflow.sh
+2025-02-02 03:05:01 - 2025-02-02T03:05:00.922706+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./response_workflow.sh
+2025-02-02 03:05:01 - 2025-02-02T03:05:00.925967+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:05:01 - 2025-02-02T03:05:00.925967+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:05:01 - 2025-02-02T03:05:01.785720+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:05:01 - 2025-02-02T03:05:01.785720+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:08:17 - 2025-02-02T03:08:17.197502+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:08:17 - 2025-02-02T03:08:17.197502+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:08:17 - 2025-02-02T03:08:17.206728+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:08:17 - 2025-02-02T03:08:17.206728+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.683471+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.683471+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.683790+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.683790+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.691006+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./init.sh
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.700729+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.691006+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./init.sh
+2025-02-02 03:08:26 - 2025-02-02T03:08:26.700729+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:08:28 - 2025-02-02T03:05:01.785720+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:08:28 - 2025-02-02T03:08:17.197502+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:08:28 - 2025-02-02T03:08:17.206728+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:08:28 - 2025-02-02T03:08:26.683471+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:08:28 - 2025-02-02T03:08:26.683790+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:08:28 - 2025-02-02T03:08:26.691006+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai ; USER=root ; COMMAND=./init.sh
+2025-02-02 03:08:28 - 2025-02-02T03:08:26.700729+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:10:01 - 2025-02-02T03:10:01.635787+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:10:01 - 2025-02-02T03:10:01.635787+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:10:01 - 2025-02-02T03:10:01.635787+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:11:12 - 2025-02-02T03:11:12.646867+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:11:12 - 2025-02-02T03:11:12.646867+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:11:12 - 2025-02-02T03:11:12.646867+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:11:12 - 2025-02-02T03:11:12.647182+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:11:12 - 2025-02-02T03:11:12.647182+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:11:12 - 2025-02-02T03:11:12.647182+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.392175+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.392175+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.392175+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.397120+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.397120+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.397120+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.398552+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.398552+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.398552+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.409614+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.409614+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:11:25 - 2025-02-02T03:11:25.409614+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:13:45 - 2025-02-02T03:13:45.335936+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:13:45 - 2025-02-02T03:13:45.335936+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:13:45 - 2025-02-02T03:13:45.335936+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.307843+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.307843+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.307843+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.309532+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.309532+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.309532+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.313445+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.313445+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.313445+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.321515+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.321515+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:15:13 - 2025-02-02T03:15:13.321515+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:15:14 - 2025-02-02T03:15:14.449751+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:15:14 - 2025-02-02T03:15:14.449751+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:15:14 - 2025-02-02T03:15:14.449751+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.142983+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.142983+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.142983+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.145754+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.145754+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.145754+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.145856+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.145856+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.163349+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.145856+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.163349+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:16:09 - 2025-02-02T03:16:09.163349+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:16:10 - 2025-02-02T03:16:10.388328+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:16:10 - 2025-02-02T03:16:10.388328+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:16:10 - 2025-02-02T03:16:10.388328+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.743167+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.743167+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.743167+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.749473+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.749473+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.749473+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.753136+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.753136+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.753136+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.760563+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.760563+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:17:42 - 2025-02-02T03:17:42.760563+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:17:43 - 2025-02-02T03:17:43.566191+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:17:43 - 2025-02-02T03:17:43.566191+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:17:43 - 2025-02-02T03:17:43.566191+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398097+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398097+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398097+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398587+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398587+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398587+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398681+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398681+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.398681+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.402986+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.402986+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:19:47 - 2025-02-02T03:19:47.402986+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:19:48 - 2025-02-02T03:19:48.563816+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:19:48 - 2025-02-02T03:19:48.563816+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:19:48 - 2025-02-02T03:19:48.563816+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.919257+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.919257+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.919257+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.919675+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.919675+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.919675+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.920692+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:20:49 - 2025-02-02T03:20:49.920692+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:20:50 - 2025-02-02T03:20:49.920692+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:20:50 - 2025-02-02T03:20:49.924549+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:20:50 - 2025-02-02T03:20:49.924549+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:20:50 - 2025-02-02T03:20:49.924549+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:20:50 - 2025-02-02T03:20:50.585442+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:20:50 - 2025-02-02T03:20:50.585442+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:20:50 - 2025-02-02T03:20:50.585442+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.146985+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.146985+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.146985+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.150586+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.150586+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.150586+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.150845+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.150845+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.150845+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./splunk_forwarder_setup.sh
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.156012+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.156012+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:26:43 - 2025-02-02T03:26:43.156012+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:27:48 - 2025-02-02T03:27:48.114559+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:27:48 - 2025-02-02T03:27:48.114559+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:27:48 - 2025-02-02T03:27:48.114559+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.264164+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.264164+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.264164+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.264623+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.264623+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.264623+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.265605+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/sbin/shutdown
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.265605+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/sbin/shutdown
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.265605+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/sbin/shutdown
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.270747+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.270747+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.270747+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.329352+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.329352+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:28:26 - 2025-02-02T03:28:26.329352+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.670779+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.670779+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.670779+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.671035+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.675168+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/sbin/shutdown 0
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.671035+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.671035+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.681469+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.675168+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/sbin/shutdown 0
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.681469+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.675168+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=/usr/sbin/shutdown 0
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.681469+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.791345+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.791345+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-02 03:28:28 - 2025-02-02T03:28:28.791345+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-04 05:35:30 - 2025-02-04T05:34:58.514383+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
+2025-02-04 05:35:30 - 2025-02-04T05:35:29.889890+00:00 ccdctestubunutserver sudo: PAM unable to dlopen(pam_pwquality.so): /usr/lib/security/pam_pwquality.so: cannot open shared object file: No such file or directory
+2025-02-04 05:35:30 - 2025-02-04T05:35:29.890251+00:00 ccdctestubunutserver sudo: PAM adding faulty module: pam_pwquality.so
+2025-02-04 05:35:30 - 2025-02-04T05:35:29.891041+00:00 ccdctestubunutserver sudo:     ccdc : TTY=tty1 ; PWD=/home/ccdc/ccdc2025/lin_harden_oai/scripts ; USER=root ; COMMAND=./custom_user_monitor.sh
+2025-02-04 05:35:30 - 2025-02-04T05:35:29.893375+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session opened for user root(uid=0) by ccdc(uid=1000)
+2025-02-04 05:35:30 - 2025-02-04T05:35:30.177938+00:00 ccdctestubunutserver sudo: pam_unix(sudo:session): session closed for user root
