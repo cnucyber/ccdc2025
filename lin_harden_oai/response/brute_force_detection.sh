@@ -18,7 +18,7 @@ while read IP; do
     iptables -A INPUT -s $IP -j DROP
 
     # Send an alert about the blocked IP
-    echo "Blocked IP address $IP due to multiple failed SSH login attempts" | mail -s "Brute Force Attack Detected" admin@example.com
+    echo "Blocked IP address $IP due to multiple failed SSH login attempts"
 done < $BLOCK_LIST
 
 echo "Brute-force attack detection and response completed!"
