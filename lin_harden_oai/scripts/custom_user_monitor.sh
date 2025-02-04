@@ -4,6 +4,7 @@
 
 # Settings
 LOG_FILE="/var/log/user_activity.log"
+ALERT_FILE="/var/log/user_alerts.log"
 AUDIT_RULES_DIR="/etc/audit/rules.d"
 
 # Ensure auditd is installed
@@ -36,16 +37,21 @@ chmod 600 $AUDIT_RULES_DIR/user_creation.rules
 echo "Restarting auditd service..."
 systemctl restart auditd || { echo "Failed to restart auditd"; exit 1; }
 
-# 4. Check for suspicious user activity and log it
+# 4. Monitor user activity in real-time and alert on suspicious events
 echo "Monitoring for suspicious activity..."
 
-# Run tail in the background to continuously monitor logs
-tail -f /var/log/auth.log | grep --line-buffered -E "sudo|useradd" | while read -r line; do
-    echo "$(date +'%Y-%m-%d %H:%M:%S') - $line" >> $LOG_FILE
+tail -f /var/log/auth.log | grep --line-buffered -E "sudo|useradd|passwd|groupadd|usermod|su" | while read -r line; do
+    timestamp=$(date +'%Y-%m-%d %H:%M:%S')
+    echo "$timestamp - Suspicious activity detected: $line" >> $LOG_FILE
+    echo "$timestamp - ALERT: $line" >> $ALERT_FILE
+    echo -e "\e[1;31m[ALERT] Suspicious user activity detected!\e[0m"
+    echo "$timestamp - $line"
 done &  # Run the tail process in the background
 
-# Optionally, you can add a log message to confirm the background process is running
-echo "User activity monitoring is now running in the background. Logs are being written to $LOG_FILE."
+# Notify that monitoring has started
+echo "User activity monitoring is now running in the background."
+echo "Alerts will be displayed in the terminal and logged to $ALERT_FILE."
+echo "Log file: $LOG_FILE"
 
-# Exit the script so you can run other commands
-echo "User activity monitoring setup complete. You can now use the terminal."
+# Exit the script so you can continue using the terminal
+echo "User activity monitoring setup complete."
