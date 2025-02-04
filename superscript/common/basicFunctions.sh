@@ -9,7 +9,6 @@ green_start="\033[32m"
 yellow_start="\033[1;33m"
 
 src_dir=$(dirname "$(realpath "$0")")
-export src_dir
 
 green_text() {
   text=$1
