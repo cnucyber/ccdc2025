@@ -35,7 +35,7 @@ echo "Fail2ban installation and configuration completed!"
 
 
 # ========================================
-# 2. Install and configure AIDE
+# 2. Install and configure AIDE (Advanced Intrusion Detection Environment)
 # ========================================
 
 echo "Installing and configuring AIDE (Advanced Intrusion Detection Environment)..."
@@ -43,17 +43,51 @@ echo "Installing and configuring AIDE (Advanced Intrusion Detection Environment)
 # Install AIDE
 apt install aide -y
 
-# Initialize AIDE
+# Define the AIDE configuration file path
+AIDE_CONFIG_FILE="/etc/aide/aide.conf"
+
+# Create log and alert directories for AIDE
+mkdir -p /var/log/aide /var/log/aide/alerts
+
+# Set permissions for the log directories
+chmod 700 /var/log/aide
+chmod 700 /var/log/aide/alerts
+chown root:root /var/log/aide /var/log/aide/alerts
+
+# Initialize AIDE database (this may take some time depending on the number of files on the system)
 aideinit
 
-# Schedule AIDE checks every 10 minutes using cron
-echo "*/10 * * * * root /usr/bin/aide --check" > /etc/cron.d/aide
+# Move the newly created database to the correct location
+mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+
+# Configure AIDE to monitor important directories (customize this as needed)
+cat <<EOL > $AIDE_CONFIG_FILE
+# AIDE Configuration
+database = /var/lib/aide/aide.db
+database_out = /var/lib/aide/aide.db.new
+gzip_dbout = yes
+logfile = /var/log/aide/aide.log
+report_url = file:///var/log/aide/alerts/aide_report.txt
+# Monitor these directories
+/etc
+/bin
+/sbin
+/usr
+/var
+EOL
+
+# Set file permissions for the AIDE configuration
+chmod 600 $AIDE_CONFIG_FILE
+chown root:root $AIDE_CONFIG_FILE
+
+# Set up cron job to run AIDE check every 10 minutes
+echo "*/10 * * * * root /usr/bin/aide --check >> /var/log/aide/aide.log 2>&1 && /usr/bin/aide --report >> /var/log/aide/alerts/aide_report.txt" > /etc/cron.d/aide
 
 echo "AIDE installation and configuration completed!"
 
 
 # ========================================
-# 3. Install and configure rkhunter
+# 3. Install and configure rkhunter (Rootkit Hunter)
 # ========================================
 
 echo "Installing and configuring rkhunter (Rootkit Hunter)..."
@@ -80,60 +114,11 @@ else
     echo "Skipping rkhunter scan."
 fi
 
-# # Schedule rkhunter checks every 10 minutes using cron (if user agreed to run it)
-# if [[ "$RUN_RK_HUNTER" =~ ^[Yy]$ ]]; then
-#     echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
-# fi
+# Schedule rkhunter checks every 10 minutes using cron (if user agreed to run it)
+if [[ "$RUN_RK_HUNTER" =~ ^[Yy]$ ]]; then
+    echo "*/10 * * * * root rkhunter --check --skip-keypress" > /etc/cron.d/rkhunter
+fi
 
 echo "rkhunter installation and configuration completed!"
-
-
-# # ========================================
-# # 4. Install and configure OSSEC (Host-based IDS)
-# # ========================================
-
-# # Check if OSSEC is already installed by looking for the /var/ossec directory
-# if [ -d "/var/ossec" ]; then
-#     echo "OSSEC is already installed. Skipping OSSEC installation."
-# else
-#     echo "Installing and configuring OSSEC (Host-based IDS)..."
-
-#     # Install necessary dependencies
-#     apt install -y curl unzip build-essential gcc make \
-#         libpcre2-dev zlib1g-dev libssl-dev libevent-dev \
-#         libsystemd-dev
-
-#     # Download OSSEC installer
-#     curl -L -o /tmp/ossec.tar.gz https://github.com/ossec/ossec-hids/archive/refs/tags/3.7.0.tar.gz
-
-#     # Extract the installer
-#     tar -xvzf /tmp/ossec.tar.gz -C /tmp/
-
-#     # Change directory to OSSEC source
-#     cd /tmp/ossec-hids-3.7.0/
-
-#     # Create a PRELOADED-VARS file to provide non-interactive inputs
-#     cat <<EOF > /tmp/PRELOADED-VARS.conf
-# USER_LANGUAGE="en"
-# USER_INSTALL_TYPE="server"
-# USER_DIR="/var/ossec"
-# USER_ENABLE_EMAIL="no"
-# USER_ENABLE_ACTIVE_RESPONSE="yes"
-# USER_ENABLE_SYSCHECK="yes"
-# USER_ENABLE_ROOTCHECK="yes"
-# USER_ENABLE_FIREWALLDROP="yes"
-# EOF
-
-#     # Run the OSSEC installation with preloaded answers
-#     export PRELOADED_VARS="/tmp/PRELOADED-VARS.conf"
-#     ./install.sh
-
-#     # Enable and start OSSEC service
-#     systemctl enable ossec
-#     systemctl start ossec
-
-#     echo "OSSEC installation and configuration completed!"
-# fi
-
 
 echo "Intrusion detection and prevention setup completed successfully!"
