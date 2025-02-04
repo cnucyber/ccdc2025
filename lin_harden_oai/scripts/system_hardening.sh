@@ -8,7 +8,10 @@ echo "Starting system hardening..."
 # 1. Ensure necessary security packages are installed
 # ========================================
 echo "Installing security-related packages..."
-apt-get update && apt-get install -y libpam-pwquality || { echo "Failed to install security packages"; exit 1; }
+if ! apt-get update && apt-get install -y libpam-pwquality; then
+    echo "Failed to install libpam-pwquality. Exiting."
+    exit 1
+fi
 
 # ========================================
 # 2. Disable unused filesystems
@@ -43,22 +46,24 @@ sysctl -p
 # ========================================
 echo "Disabling root SSH login..."
 ssh_config="/etc/ssh/sshd_config"
-if grep -q "^PermitRootLogin" "$ssh_config"; then
-    sed -i 's/^PermitRootLogin .*/PermitRootLogin no/' "$ssh_config"
+if [ -f "$ssh_config" ]; then
+    if grep -q "^PermitRootLogin" "$ssh_config"; then
+        sed -i 's/^PermitRootLogin .*/PermitRootLogin no/' "$ssh_config"
+    else
+        echo "PermitRootLogin no" >> "$ssh_config"
+    fi
+    systemctl restart sshd
 else
-    echo "PermitRootLogin no" >> "$ssh_config"
+    echo "Error: $ssh_config not found. Skipping root SSH login disable."
 fi
-systemctl restart sshd
 
 # ========================================
 # 5. Lock password aging for system accounts (UID < 1000)
 # ========================================
 echo "Locking password aging for system accounts..."
-while IFS=: read -r user _ uid _; do
-    if [ "$uid" -lt 1000 ]; then
-        chage -E 0 "$user"
-    fi
-done < /etc/passwd
+getent passwd | awk -F: '$3 < 1000 { print $1 }' | while read user; do
+    chage -E 0 "$user" || echo "Failed to lock password aging for user $user"
+done
 
 # ========================================
 # 6. Enforce password complexity
@@ -102,7 +107,7 @@ while IFS=: read -r user _ uid _; do
             fi
 
             # Check password length
-            password_length=$(echo "$password_hash" | wc -c)
+            password_length=$(echo "$password_hash" | wc -m)
             if [ "$password_length" -lt "$MIN_PASSWORD_LENGTH" ]; then
                 passwd -l "$user"
                 echo "Account $user disabled due to weak password."
