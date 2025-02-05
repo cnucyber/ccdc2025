@@ -23,6 +23,7 @@ LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
 # Detect the username and UID of the user running this script
 SCRIPT_USER=$(whoami)
 SCRIPT_UID=$(id -u "$SCRIPT_USER")
+SCRIPT_PID=$$  # Capture the script's own process ID
 
 # Ensure required commands exist
 command -v auditctl &> /dev/null || { echo "Error: auditd is not installed. Install with: sudo apt install auditd"; exit 1; }
@@ -61,14 +62,23 @@ monitor_all_user_commands() {
     if [[ "$ENABLE_COMMAND_ECHO" == true ]]; then
         log_event "INFO" "Monitoring all executed commands except those by $SCRIPT_USER (UID: $SCRIPT_UID)..."
 
-        # Dynamically exclude the script's user in auditd rules
+        # Remove old audit rules to avoid duplicates
         auditctl -D
+
+        # Exclude script user from logging at the kernel level
         auditctl -a always,exit -F arch=b64 -S execve -F auid!="$SCRIPT_UID" -k command_exec
         auditctl -a always,exit -F arch=b32 -S execve -F auid!="$SCRIPT_UID" -k command_exec
 
         # Monitor the audit log for executed commands
         tail -Fn0 /var/log/audit/audit.log | while read -r line; do
             if echo "$line" | grep -q "execve"; then
+                pid=$(echo "$line" | grep -oP 'pid=\K[0-9]+' | head -1)
+
+                # Skip logging if the PID matches the script's PID
+                if [[ "$pid" == "$SCRIPT_PID" ]]; then
+                    continue
+                fi
+
                 timestamp=$(date +'%Y-%m-%d %H:%M:%S')
                 user_id=$(echo "$line" | grep -oP 'uid=\K[0-9]+' | head -1)
                 command=$(echo "$line" | grep -oP 'a0="[^"]+"' | cut -d '"' -f2)
@@ -77,8 +87,9 @@ monitor_all_user_commands() {
                 username=$(getent passwd "$user_id" | cut -d: -f1)
                 [[ -z "$username" ]] && username="Unknown"
 
-                # Log commands executed by all users except the script runner
-                log_event "COMMAND" "User [$username] executed command: $full_command"
+                if [[ "$username" != "$SCRIPT_USER" && "$user_id" != "$SCRIPT_UID" ]]; then
+                    log_event "COMMAND" "User [$username] executed command: $full_command"
+                fi
             fi
         done
     else
