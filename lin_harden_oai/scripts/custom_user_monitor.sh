@@ -1,29 +1,29 @@
 #!/bin/bash
 
 # ==========================================
-# SYSTEM-WIDE USER COMMAND MONITORING & SECURITY AUDITING
+# ULTIMATE SYSTEM-WIDE COMMAND MONITORING SUITE
 # ==========================================
-# This script monitors:
-# - Commands executed by ALL users except the script's user
-# - User logins (failed/successful)
-# - Unauthorized user creations/modifications
-# - Suspicious user activity (sudo, passwd changes, privilege escalation)
-# - Log rotation to prevent excessive log size
+# This script:
+# ✅ Logs every command from all users
+# ✅ Monitors system-wide command execution via auditd, psacct, bash history, and Sysmon
+# ✅ Filters out its own execution to prevent self-logging
+# ✅ Detects suspicious activity (privilege escalation, user modifications)
+# ✅ Implements log rotation to prevent excessive file growth
 
 # CONFIGURATION
-LOG_FILE="/var/log/user_activity.log"      # General activity log
-ALERT_FILE="/var/log/user_alerts.log"      # Suspicious activity alerts
-MONITOR_FILE="/var/log/auth.log"           # Authentication log for tracking logins
-ENABLE_COMMAND_ECHO=true                   # Enable/Disable real-time command logging
-LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
+LOG_DIR="/var/log/custom_monitor"
+LOG_FILE="$LOG_DIR/user_activity.log"
+ALERT_FILE="$LOG_DIR/user_alerts.log"
+BASH_LOG_FILE="$LOG_DIR/bash_commands.log"
+LOG_SIZE_LIMIT=1000000  # 1MB max log size before rotation
 
 # Detect the username and UID of the user running this script
 SCRIPT_USER=$(whoami)
 SCRIPT_UID=$(id -u "$SCRIPT_USER")
-SCRIPT_PID=$$  # Capture the script's own process ID
+SCRIPT_PID=$$
 
 # Ensure required commands exist
-for cmd in auditctl ausearch tail awk grep stat; do
+for cmd in auditctl ausearch lastcomm tail awk grep stat rsyslogd sysmon; do
     command -v "$cmd" &> /dev/null || { echo "Error: $cmd is not installed. Install it before running."; exit 1; }
 done
 
@@ -50,19 +50,44 @@ log_event() {
 }
 
 # ==========================================
-# FUNCTION: Configure Audit Rules
+# FUNCTION: Set Up Logging Systems
 # ==========================================
-configure_audit_rules() {
-    log_event "INFO" "Configuring audit rules to exclude $SCRIPT_USER (UID: $SCRIPT_UID)..."
-    
-    # Remove previous audit rules
-    auditctl -D
-    
-    # Set audit rules to capture all commands except from the script user
+setup_logging() {
+    log_event "INFO" "Setting up command monitoring systems..."
+
+    # Create log directory if it doesn't exist
+    mkdir -p "$LOG_DIR"
+
+    # Install and configure auditd
+    log_event "INFO" "Configuring auditd..."
+    sudo apt install auditd -y
+    auditctl -D  # Remove previous audit rules
     auditctl -a always,exit -F arch=b64 -S execve -F auid!="$SCRIPT_UID" -k user_commands
     auditctl -a always,exit -F arch=b32 -S execve -F auid!="$SCRIPT_UID" -k user_commands
+    log_event "INFO" "auditd is now monitoring command execution."
 
-    log_event "INFO" "Audit rules configured."
+    # Install and enable process accounting (psacct/acct)
+    log_event "INFO" "Configuring process accounting..."
+    sudo apt install acct -y
+    sudo systemctl enable acct
+    sudo systemctl start acct
+    log_event "INFO" "psacct/acct is now tracking process activity."
+
+    # Configure bash history logging to syslog
+    log_event "INFO" "Configuring bash command logging..."
+    echo 'export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S "' >> ~/.bashrc
+    echo 'export PROMPT_COMMAND="history 1 | sed \"s/^ *[0-9]* *//\" | logger -t bash -p local6.info"' >> ~/.bashrc
+    source ~/.bashrc
+    echo "local6.* $BASH_LOG_FILE" | sudo tee -a /etc/rsyslog.d/bash.conf
+    sudo systemctl restart rsyslog
+    log_event "INFO" "Bash command logging enabled."
+
+    # Install and configure Sysmon for Linux
+    log_event "INFO" "Installing Sysmon for advanced logging..."
+    wget -q https://github.com/Sysinternals/SysmonForLinux/releases/download/v1.0.0/sysmon_1.0.0-1_amd64.deb
+    sudo dpkg -i sysmon_1.0.0-1_amd64.deb
+    sudo sysmon -accepteula -i
+    log_event "INFO" "Sysmon is now tracking system-wide activity."
 }
 
 # ==========================================
@@ -110,7 +135,7 @@ monitor_suspicious_activity() {
 rotate_logs() {
     while true; do
         sleep 3600  # Check every hour
-        for file in "$LOG_FILE" "$ALERT_FILE"; do
+        for file in "$LOG_FILE" "$ALERT_FILE" "$BASH_LOG_FILE"; do
             if [[ -f "$file" ]] && [[ $(stat --format=%s "$file") -ge $LOG_SIZE_LIMIT ]]; then
                 mv "$file" "$file.old"
                 touch "$file"
@@ -134,8 +159,8 @@ trap cleanup SIGINT SIGTERM
 # ==========================================
 # START MONITORING FUNCTIONS IN BACKGROUND
 # ==========================================
-log_event "INFO" "Starting full system-wide user command monitoring..."
-configure_audit_rules
+setup_logging
+log_event "INFO" "Starting full system-wide command monitoring..."
 monitor_user_commands &  # Capture commands from ALL users except the script runner
 monitor_suspicious_activity &  # Track privilege escalations and user modifications
 rotate_logs &  # Prevent log overflow
