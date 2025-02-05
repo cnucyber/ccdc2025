@@ -8,16 +8,13 @@
 # - User logins (failed/successful)
 # - Unauthorized user creations/modifications
 # - Suspicious user activity (sudo, passwd changes, privilege escalation)
-# - File integrity (AIDE)
-# - Log rotation & alerting
+# - Log rotation to prevent excessive log size
 
 # CONFIGURATION
 LOG_FILE="/var/log/user_activity.log"      # General activity log
 ALERT_FILE="/var/log/user_alerts.log"      # Suspicious activity alerts
-AIDE_REPORT="/var/log/aide/aide_report.txt" # AIDE report for file integrity monitoring
 MONITOR_FILE="/var/log/auth.log"           # Authentication log for tracking logins
-ENABLE_COMMAND_ECHO=true                    # Enable/Disable real-time command logging
-EMAIL_ALERTS=false                         # Set to 'true' to enable email alerts
+ENABLE_COMMAND_ECHO=true                   # Enable/Disable real-time command logging
 LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
 
 # Detect the username and UID of the user running this script
@@ -26,7 +23,9 @@ SCRIPT_UID=$(id -u "$SCRIPT_USER")
 SCRIPT_PID=$$  # Capture the script's own process ID
 
 # Ensure required commands exist
-command -v auditctl &> /dev/null || { echo "Error: auditd is not installed. Install with: sudo apt install auditd"; exit 1; }
+for cmd in auditctl ausearch tail awk grep stat; do
+    command -v "$cmd" &> /dev/null || { echo "Error: $cmd is not installed. Install it before running."; exit 1; }
+done
 
 # ==========================================
 # FUNCTION: Log messages with timestamps
@@ -48,53 +47,49 @@ log_event() {
     # Write to log files
     echo "$timestamp [$level] $message" >> "$LOG_FILE"
     [[ "$level" == "ALERT" ]] && echo "$timestamp [$level] $message" >> "$ALERT_FILE"
-
-    # Send email alert (optional)
-    if [[ "$EMAIL_ALERTS" == true && "$level" == "ALERT" ]]; then
-        echo "$message" | mail -s "[SECURITY ALERT] $message" "$ADMIN_EMAIL"
-    fi
 }
 
 # ==========================================
-# FUNCTION: Capture ALL User Commands Except the Script’s User
+# FUNCTION: Configure Audit Rules
 # ==========================================
-monitor_all_user_commands() {
-    if [[ "$ENABLE_COMMAND_ECHO" == true ]]; then
-        log_event "INFO" "Monitoring all executed commands except those by $SCRIPT_USER (UID: $SCRIPT_UID)..."
+configure_audit_rules() {
+    log_event "INFO" "Configuring audit rules to exclude $SCRIPT_USER (UID: $SCRIPT_UID)..."
+    
+    # Remove previous audit rules
+    auditctl -D
+    
+    # Set audit rules to capture all commands except from the script user
+    auditctl -a always,exit -F arch=b64 -S execve -F auid!="$SCRIPT_UID" -k user_commands
+    auditctl -a always,exit -F arch=b32 -S execve -F auid!="$SCRIPT_UID" -k user_commands
 
-        # Remove old audit rules to avoid duplicates
-        auditctl -D
+    log_event "INFO" "Audit rules configured."
+}
 
-        # Exclude script user from logging at the kernel level
-        auditctl -a always,exit -F arch=b64 -S execve -F auid!="$SCRIPT_UID" -k command_exec
-        auditctl -a always,exit -F arch=b32 -S execve -F auid!="$SCRIPT_UID" -k command_exec
+# ==========================================
+# FUNCTION: Monitor User Commands (Excluding This Script)
+# ==========================================
+monitor_user_commands() {
+    log_event "INFO" "Monitoring commands from all users except $SCRIPT_USER..."
 
-        # Monitor the audit log for executed commands
-        tail -Fn0 /var/log/audit/audit.log | while read -r line; do
-            if echo "$line" | grep -q "execve"; then
-                pid=$(echo "$line" | grep -oP 'pid=\K[0-9]+' | head -1)
+    tail -Fn0 /var/log/audit/audit.log | while read -r line; do
+        if echo "$line" | grep -q "execve"; then
+            pid=$(echo "$line" | grep -oP 'pid=\K[0-9]+' | head -1)
 
-                # Skip logging if the PID matches the script's PID
-                if [[ "$pid" == "$SCRIPT_PID" ]]; then
-                    continue
-                fi
-
-                timestamp=$(date +'%Y-%m-%d %H:%M:%S')
-                user_id=$(echo "$line" | grep -oP 'uid=\K[0-9]+' | head -1)
-                command=$(echo "$line" | grep -oP 'a0="[^"]+"' | cut -d '"' -f2)
-                full_command=$(echo "$line" | grep -oP 'a[0-9]="[^"]+"' | tr '\n' ' ' | sed 's/a[0-9]="//g' | sed 's/"//g')
-
-                username=$(getent passwd "$user_id" | cut -d: -f1)
-                [[ -z "$username" ]] && username="Unknown"
-
-                if [[ "$username" != "$SCRIPT_USER" && "$user_id" != "$SCRIPT_UID" ]]; then
-                    log_event "COMMAND" "User [$username] executed command: $full_command"
-                fi
+            # Ignore if PID matches the script's process
+            if [[ "$pid" == "$SCRIPT_PID" ]]; then
+                continue
             fi
-        done
-    else
-        log_event "INFO" "Command monitoring is disabled."
-    fi
+
+            timestamp=$(date +'%Y-%m-%d %H:%M:%S')
+            user_id=$(echo "$line" | grep -oP 'uid=\K[0-9]+' | head -1)
+            command=$(echo "$line" | grep -oP 'a0="[^"]+"' | cut -d '"' -f2)
+
+            username=$(getent passwd "$user_id" | cut -d: -f1)
+            [[ -z "$username" ]] && username="Unknown"
+
+            log_event "COMMAND" "User [$username] executed command: $command"
+        fi
+    done
 }
 
 # ==========================================
@@ -102,8 +97,9 @@ monitor_all_user_commands() {
 # ==========================================
 monitor_suspicious_activity() {
     log_event "INFO" "Monitoring suspicious user activity..."
+    
     tail -Fn0 "$MONITOR_FILE" | grep --line-buffered -E "sudo|useradd|passwd|groupadd|usermod" | while read -r line; do
-        user=$(echo "$line" | awk '{print $NF}')
+        timestamp=$(date +'%Y-%m-%d %H:%M:%S')
         log_event "ALERT" "Suspicious activity detected: $line"
     done
 }
@@ -125,11 +121,24 @@ rotate_logs() {
 }
 
 # ==========================================
+# FUNCTION: Cleanup and Stop Monitoring Gracefully
+# ==========================================
+cleanup() {
+    log_event "INFO" "Stopping monitoring and cleaning up..."
+    auditctl -D  # Remove audit rules
+    exit 0
+}
+
+trap cleanup SIGINT SIGTERM
+
+# ==========================================
 # START MONITORING FUNCTIONS IN BACKGROUND
 # ==========================================
 log_event "INFO" "Starting full system-wide user command monitoring..."
-monitor_all_user_commands &  # Capture commands from ALL users except the script runner
+configure_audit_rules
+monitor_user_commands &  # Capture commands from ALL users except the script runner
 monitor_suspicious_activity &  # Track privilege escalations and user modifications
 rotate_logs &  # Prevent log overflow
 
-log_event "INFO" "Monitoring system is now running in the background."
+log_event "INFO" "Monitoring system is now running in the background. Press Ctrl+C to stop."
+wait
