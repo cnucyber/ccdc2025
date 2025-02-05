@@ -20,8 +20,9 @@ ENABLE_COMMAND_ECHO=true                    # Enable/Disable real-time command l
 EMAIL_ALERTS=false                         # Set to 'true' to enable email alerts
 LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
 
-# Detect the username of the user running this script
+# Detect the username and UID of the user running this script
 SCRIPT_USER=$(whoami)
+SCRIPT_UID=$(id -u "$SCRIPT_USER")
 
 # Ensure required commands exist
 command -v auditctl &> /dev/null || { echo "Error: auditd is not installed. Install with: sudo apt install auditd"; exit 1; }
@@ -54,16 +55,16 @@ log_event() {
 }
 
 # ==========================================
-# FUNCTION: Capture ALL User Commands Except the Script's User
+# FUNCTION: Capture ALL User Commands Except the Script’s User
 # ==========================================
 monitor_all_user_commands() {
     if [[ "$ENABLE_COMMAND_ECHO" == true ]]; then
-        log_event "INFO" "Monitoring all executed commands except those by $SCRIPT_USER..."
+        log_event "INFO" "Monitoring all executed commands except those by $SCRIPT_USER (UID: $SCRIPT_UID)..."
 
-        # Configure audit rules to log ALL command executions via execve
+        # Dynamically exclude the script's user in auditd rules
         auditctl -D
-        auditctl -a always,exit -F arch=b64 -S execve -k command_exec
-        auditctl -a always,exit -F arch=b32 -S execve -k command_exec
+        auditctl -a always,exit -F arch=b64 -S execve -F auid!="$SCRIPT_UID" -k command_exec
+        auditctl -a always,exit -F arch=b32 -S execve -F auid!="$SCRIPT_UID" -k command_exec
 
         # Monitor the audit log for executed commands
         tail -Fn0 /var/log/audit/audit.log | while read -r line; do
@@ -76,10 +77,8 @@ monitor_all_user_commands() {
                 username=$(getent passwd "$user_id" | cut -d: -f1)
                 [[ -z "$username" ]] && username="Unknown"
 
-                # Ignore commands executed by the user running this script
-                if [[ "$username" != "$SCRIPT_USER" ]]; then
-                    log_event "COMMAND" "User [$username] executed command: $full_command"
-                fi
+                # Log commands executed by all users except the script runner
+                log_event "COMMAND" "User [$username] executed command: $full_command"
             fi
         done
     else
