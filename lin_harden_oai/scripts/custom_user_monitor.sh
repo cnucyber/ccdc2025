@@ -18,7 +18,6 @@ AIDE_REPORT="/var/log/aide/aide_report.txt" # AIDE report for file integrity mon
 MONITOR_FILE="/var/log/auth.log"           # Authentication log for tracking logins
 ENABLE_COMMAND_ECHO=true                    # Enable/Disable real-time command logging
 EMAIL_ALERTS=false                         # Set to 'true' to enable email alerts
-ADMIN_EMAIL="admin@example.com"            # Change this to the actual admin email
 LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
 
 # Detect the username of the user running this script
