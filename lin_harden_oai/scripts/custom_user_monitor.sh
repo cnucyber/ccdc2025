@@ -3,8 +3,8 @@
 # ==========================================
 # SYSTEM-WIDE USER COMMAND MONITORING & SECURITY AUDITING
 # ==========================================
-# This script continuously monitors:
-# - Commands executed by ALL users in real-time
+# This script monitors:
+# - Commands executed by ALL users except the script's user
 # - User logins (failed/successful)
 # - Unauthorized user creations/modifications
 # - Suspicious user activity (sudo, passwd changes, privilege escalation)
@@ -20,6 +20,9 @@ ENABLE_COMMAND_ECHO=true                    # Enable/Disable real-time command l
 EMAIL_ALERTS=false                         # Set to 'true' to enable email alerts
 ADMIN_EMAIL="admin@example.com"            # Change this to the actual admin email
 LOG_SIZE_LIMIT=1000000                      # 1MB max log size before rotation
+
+# Detect the username of the user running this script
+SCRIPT_USER=$(whoami)
 
 # Ensure required commands exist
 command -v auditctl &> /dev/null || { echo "Error: auditd is not installed. Install with: sudo apt install auditd"; exit 1; }
@@ -52,11 +55,11 @@ log_event() {
 }
 
 # ==========================================
-# FUNCTION: Capture ALL User Commands in Real-Time
+# FUNCTION: Capture ALL User Commands Except the Script's User
 # ==========================================
 monitor_all_user_commands() {
     if [[ "$ENABLE_COMMAND_ECHO" == true ]]; then
-        log_event "INFO" "Monitoring all executed commands system-wide..."
+        log_event "INFO" "Monitoring all executed commands except those by $SCRIPT_USER..."
 
         # Configure audit rules to log ALL command executions via execve
         auditctl -D
@@ -74,7 +77,10 @@ monitor_all_user_commands() {
                 username=$(getent passwd "$user_id" | cut -d: -f1)
                 [[ -z "$username" ]] && username="Unknown"
 
-                log_event "COMMAND" "User [$username] executed command: $full_command"
+                # Ignore commands executed by the user running this script
+                if [[ "$username" != "$SCRIPT_USER" ]]; then
+                    log_event "COMMAND" "User [$username] executed command: $full_command"
+                fi
             fi
         done
     else
@@ -113,7 +119,7 @@ rotate_logs() {
 # START MONITORING FUNCTIONS IN BACKGROUND
 # ==========================================
 log_event "INFO" "Starting full system-wide user command monitoring..."
-monitor_all_user_commands &  # Capture commands from ALL users
+monitor_all_user_commands &  # Capture commands from ALL users except the script runner
 monitor_suspicious_activity &  # Track privilege escalations and user modifications
 rotate_logs &  # Prevent log overflow
 
