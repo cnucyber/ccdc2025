@@ -5,7 +5,7 @@
 # ==========================================
 # This script:
 # ✅ Logs every command from all users
-# ✅ Monitors system-wide command execution via auditd, psacct, bash history, and Sysmon
+# ✅ Monitors system-wide command execution via auditd, psacct, bash history
 # ✅ Filters out its own execution to prevent self-logging
 # ✅ Detects suspicious activity (privilege escalation, user modifications)
 # ✅ Implements log rotation to prevent excessive file growth
@@ -37,16 +37,6 @@ install_packages() {
             log_event "INFO" "Package $pkg is already installed."
         fi
     done
-
-    # Install Sysmon if not installed
-    if ! dpkg -l | grep -q "sysmon"; then
-        log_event "INFO" "Installing Sysmon..."
-        wget -q https://github.com/Sysinternals/SysmonForLinux/releases/download/v1.0.0/sysmon_1.0.0-1_amd64.deb
-        sudo dpkg -i sysmon_1.0.0-1_amd64.deb || { log_event "ALERT" "Failed to install Sysmon."; exit 1; }
-        log_event "INFO" "Sysmon installed successfully."
-    else
-        log_event "INFO" "Sysmon is already installed."
-    fi
 }
 
 # ==========================================
@@ -101,11 +91,6 @@ setup_logging() {
     echo "local6.* $BASH_LOG_FILE" | sudo tee -a /etc/rsyslog.d/bash.conf
     sudo systemctl restart rsyslog
     log_event "INFO" "Bash command logging enabled."
-
-    # Configure Sysmon for Linux
-    log_event "INFO" "Configuring Sysmon..."
-    sudo sysmon -accepteula -i
-    log_event "INFO" "Sysmon is now tracking system-wide activity."
 }
 
 # ==========================================
