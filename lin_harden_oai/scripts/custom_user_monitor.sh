@@ -22,10 +22,32 @@ SCRIPT_USER=$(whoami)
 SCRIPT_UID=$(id -u "$SCRIPT_USER")
 SCRIPT_PID=$$
 
-# Ensure required commands exist
-for cmd in auditctl ausearch lastcomm tail awk grep stat rsyslogd sysmon; do
-    command -v "$cmd" &> /dev/null || { echo "Error: $cmd is not installed. Install it before running."; exit 1; }
-done
+# ==========================================
+# FUNCTION: Install Required Packages
+# ==========================================
+install_packages() {
+    log_event "INFO" "Installing required packages..."
+
+    # Install necessary packages if not already installed
+    for pkg in auditd acct rsyslog wget; do
+        if ! dpkg -l | grep -q "$pkg"; then
+            sudo apt install -y "$pkg" || { log_event "ALERT" "Failed to install package: $pkg"; exit 1; }
+            log_event "INFO" "Package $pkg installed successfully."
+        else
+            log_event "INFO" "Package $pkg is already installed."
+        fi
+    done
+
+    # Install Sysmon if not installed
+    if ! dpkg -l | grep -q "sysmon"; then
+        log_event "INFO" "Installing Sysmon..."
+        wget -q https://github.com/Sysinternals/SysmonForLinux/releases/download/v1.0.0/sysmon_1.0.0-1_amd64.deb
+        sudo dpkg -i sysmon_1.0.0-1_amd64.deb || { log_event "ALERT" "Failed to install Sysmon."; exit 1; }
+        log_event "INFO" "Sysmon installed successfully."
+    else
+        log_event "INFO" "Sysmon is already installed."
+    fi
+}
 
 # ==========================================
 # FUNCTION: Log messages with timestamps
@@ -60,7 +82,6 @@ setup_logging() {
 
     # Install and configure auditd
     log_event "INFO" "Configuring auditd..."
-    sudo apt install auditd -y
     auditctl -D  # Remove previous audit rules
     auditctl -a always,exit -F arch=b64 -S execve -F auid!="$SCRIPT_UID" -k user_commands
     auditctl -a always,exit -F arch=b32 -S execve -F auid!="$SCRIPT_UID" -k user_commands
@@ -68,7 +89,6 @@ setup_logging() {
 
     # Install and enable process accounting (psacct/acct)
     log_event "INFO" "Configuring process accounting..."
-    sudo apt install acct -y
     sudo systemctl enable acct
     sudo systemctl start acct
     log_event "INFO" "psacct/acct is now tracking process activity."
@@ -82,10 +102,8 @@ setup_logging() {
     sudo systemctl restart rsyslog
     log_event "INFO" "Bash command logging enabled."
 
-    # Install and configure Sysmon for Linux
-    log_event "INFO" "Installing Sysmon for advanced logging..."
-    wget -q https://github.com/Sysinternals/SysmonForLinux/releases/download/v1.0.0/sysmon_1.0.0-1_amd64.deb
-    sudo dpkg -i sysmon_1.0.0-1_amd64.deb
+    # Configure Sysmon for Linux
+    log_event "INFO" "Configuring Sysmon..."
     sudo sysmon -accepteula -i
     log_event "INFO" "Sysmon is now tracking system-wide activity."
 }
@@ -122,7 +140,7 @@ monitor_user_commands() {
 # ==========================================
 monitor_suspicious_activity() {
     log_event "INFO" "Monitoring suspicious user activity..."
-    
+
     tail -Fn0 "$MONITOR_FILE" | grep --line-buffered -E "sudo|useradd|passwd|groupadd|usermod" | while read -r line; do
         timestamp=$(date +'%Y-%m-%d %H:%M:%S')
         log_event "ALERT" "Suspicious activity detected: $line"
@@ -159,6 +177,7 @@ trap cleanup SIGINT SIGTERM
 # ==========================================
 # START MONITORING FUNCTIONS IN BACKGROUND
 # ==========================================
+install_packages
 setup_logging
 log_event "INFO" "Starting full system-wide command monitoring..."
 monitor_user_commands &  # Capture commands from ALL users except the script runner
