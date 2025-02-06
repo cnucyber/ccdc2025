@@ -18,11 +18,15 @@ Videos
     - ***Needs Testing***
     
 - Merge ip tables
-- [x] Create user monitor
+- [x] Create user monitor - Done 2/6/2025
     - ~Lock users~
     - ~Monitor for changes~
     - ~Makes copy as rpc11~ 
 - Merge main script from void shield into harding script
+    - Kenerel hardning
+    - Stop Common services
+    - SSH harding
+
 - ~Create one super script~ - Denied
 
 ## KennanSieck
