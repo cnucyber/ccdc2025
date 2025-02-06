@@ -78,7 +78,6 @@ test() {
   add_log_success "us" "success"
   add_log_warn "system" "warn"
   add_log_critical "admin" "critical"
-  clean_up
 }
 
 "$@"

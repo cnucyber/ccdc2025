@@ -16,8 +16,12 @@ Videos
 - [x] pan_harden_merge/setup.sh 
     - Added unifed logs
     - ***Needs Testing***
-    []
-    - Merge ip tables
+    
+- Merge ip tables
+- Create user monitor
+    - Lock users
+    - Monitor for changes
+    - 
 
 - ~Create one super script~ - Denied
 
