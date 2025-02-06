@@ -11,6 +11,7 @@ users_groups() {
   delimiter=","
   IFS=$delimiter
   read -ra user_list <<< "$user_list_input"
+  whoami >> "$user_list_input"
   echo "Inputted users"
   count=0
   for user in "${user_list[@]}"; do
