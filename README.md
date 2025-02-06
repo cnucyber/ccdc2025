@@ -13,9 +13,9 @@ Videos
 
 ## DrVoidest
 - Audit scripts
-    [x] pan_harden_merge/setup.sh 
-        - Added unifed logs
-        - ***Needs Testing***
+- [x] pan_harden_merge/setup.sh 
+    - Added unifed logs
+    - ***Needs Testing***
     []
     - Merge ip tables
 

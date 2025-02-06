@@ -29,7 +29,7 @@ yellow_text() {
   echo -e "${yellow_start}$text${color_end}"
 }
 
-create_log() {
+create_log() { 
   touch "${host}.csv"
   green_text "Creating logs for ${host} at $(date +'%I:%M:%S %p')"
   green_text "succ,${host},$(date +'%I:%M:%S %p'),Start of logs for ${host} at $(date +'%I:%M:%S %p')" >> "${host}.csv"
@@ -63,10 +63,23 @@ clean_up() {
   truncate -s 0 "${host}.csv"
 }
 
-create_log
-add_log_info "user" "info"
-add_log_success "us" "success"
-add_log_warn "system" "warn"
-add_log_critical "admin" "critical"
-clean_up
+test_neutered() {
+  create_log
+  add_log_info "user" "info"
+  add_log_success "us" "success"
+  add_log_warn "system" "warn"
+  add_log_critical "admin" "critical"
+  rm "${host}.csv" 
+}
+
+test() {
+  create_log
+  add_log_info "user" "info"
+  add_log_success "us" "success"
+  add_log_warn "system" "warn"
+  add_log_critical "admin" "critical"
+  clean_up
+}
+
+"$@"
 

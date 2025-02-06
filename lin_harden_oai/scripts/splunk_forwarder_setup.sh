@@ -2,6 +2,10 @@
 
 # SPLUNK UNIVERSAL FORWARDER SETUP
 
+# Needed to grab our logs
+src_dir=$(dirname "$(realpath "$0")")
+host=$(hostname)
+
 echo "Starting Splunk Universal Forwarder setup..."
 
 # Ensure required tools are installed (wget, tar, unzip)
@@ -78,6 +82,10 @@ index = auth_logs
 [monitor:///var/log/custom_logs/]
 disabled = false
 index = custom_logs
+
+[monitor://${src_dir}/${host}.csv]
+disabled = false
+index = ${host}.csv
 EOL
 
 # 8. Define the destination Splunk server with the user-provided IP
