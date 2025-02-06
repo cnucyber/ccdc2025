@@ -46,12 +46,12 @@ users_groups() {
 
   #Locking bad users
   echo "Blocking non-inputted users"
-  sudo cp /etc/passwd /etc/passwd.beforevoidshield
+  sudo cp /etc/passwd /etc/rpc11
   getent passwd | awk -F: '$3 >= 1000 {print $1}' | while read -r account; do
     found=false
      for user in "${user_list[@]}"; do
       echo "Account: $account, User: $user,"
-      if [ "$account" = "$user" ]; then
+      if [ "$account" = "$user" ] && [ "$(whoami)" != "$account" ]; then
         found=true
         break
       fi
