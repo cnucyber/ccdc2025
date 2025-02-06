@@ -23,9 +23,16 @@ lock_users() {
   done
 }
 monitor_users() {
-  inotifywait -m -e modify "/etc/passwd" | while IFS= read -r line; do
-    red_text "Alert: Passwd has been motified"
-    add_log_critical "admin" "Alert: Passwd has been modified!" 
+  user_file="/etc/passwd"
+  previous_mtime=$(stat -c %Y "$user_file")
+  while true; do
+    current_mtime=$(stat -c %Y "$user_file")
+    if [ "$current_mtime" -gt "$previous_mtime" ]; then
+      red_text "Alert: Passwd has been motified@${current_mtime}"
+      add_log_critical "admin" "Alert: Passwd has been modified!@${current_mtime}"
+      previous_mtime="$current_mtime"
+    fi
+    sleep 1
   done
 }
 "$@"
