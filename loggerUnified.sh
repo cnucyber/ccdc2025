@@ -30,27 +30,43 @@ yellow_text() {
 }
 
 create_log() {
-  touch "${host}.log"
-  blue_text "Creating logs for ${host} at $(date +'%I:%M:%S %p')"
-  blue_text "|info|${host}@$(date +'%I:%M:%S %p')| Start of logs for ${host} at $(date +'%I:%M:%S %p')" >> "${host}.log"
+  touch "${host}.csv"
+  green_text "Creating logs for ${host} at $(date +'%I:%M:%S %p')"
+  green_text "succ,${host},$(date +'%I:%M:%S %p'),Start of logs for ${host} at $(date +'%I:%M:%S %p')" >> "${host}.csv"
 }
 
 add_log_info() {
-  text=$1
-  blue_text "|info|${host}@$(date +'%I:%M:%S %p')| ${text}" >> "${host}.log"
+  type=$1
+  text=$2
+  blue_text "info,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 add_log_success() {
-  text=$1
-  green_text "|succ|${host}@$(date +'%I:%M:%S %p')| ${text}" >> "${host}.log"
+  type=$1
+  text=$2
+  green_text "succ,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 add_log_warn() {
-  text=$1
-  yellow_text "|warn|${host}@$(date +'%I:%M:%S %p')| ${text}" >> "${host}.log"
+  type=$1
+  text=$2
+  yellow_text "warn,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 add_log_critical() {
-  text=$1
-  red_text "|crit|${host}@$(date +'%I:%M:%S %p')| ${text}" >> "${host}.log"
+  type=$1
+  text=$2
+  red_text "crit,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
+
+clean_up() {
+  truncate -s 0 "${host}.csv"
+}
+
+create_log
+add_log_info "user" "info"
+add_log_success "us" "success"
+add_log_warn "system" "warn"
+add_log_critical "admin" "critical"
+clean_up
+
