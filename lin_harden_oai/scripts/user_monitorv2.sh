@@ -23,10 +23,9 @@ lock_users() {
   done
 }
 monitor_users() {
-  inotifywait -m -e modify "/etc/passwd" |
-  while read path _ file; do
-    red_text "Alert: The file '$file' has been modified!"
-    add_log_critical "admin" "Alert: The file '$file' has been modified!" 
+  inotifywait -m -e modify "/etc/passwd" | while IFS= read -r line; do
+    red_text "Alert: Passwd has been motified"
+    add_log_critical "admin" "Alert: Passwd has been modified!" 
   done
 }
 "$@"
