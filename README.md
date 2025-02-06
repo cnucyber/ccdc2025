@@ -18,10 +18,10 @@ Videos
     - ***Needs Testing***
     
 - Merge ip tables
-- Create user monitor
-    - Lock users
-    - Monitor for changes
-    - Makes copy as rpc11 
+- [x] Create user monitor
+    - ~Lock users~
+    - ~Monitor for changes~
+    - ~Makes copy as rpc11~ 
 - Merge main script from void shield into harding script
 - ~Create one super script~ - Denied
 
