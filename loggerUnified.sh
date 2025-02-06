@@ -38,25 +38,25 @@ create_log() {
 add_log_info() {
   type=$1
   text=$2
-  blue_text "info,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
+  echo "info,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 add_log_success() {
   type=$1
   text=$2
-  green_text "succ,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
+  echo "succ,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 add_log_warn() {
   type=$1
   text=$2
-  yellow_text "warn,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
+  echo "warn,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 add_log_critical() {
   type=$1
   text=$2
-  red_text "crit,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
+  echo "crit,${host},$(date +'%I:%M:%S %p'),${type},${text}" >> "${host}.csv"
 }
 
 clean_up() {
