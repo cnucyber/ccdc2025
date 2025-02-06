@@ -2,6 +2,10 @@
 
 # MASTER INITIALIZATION SCRIPT FOR SYSTEM SECURITY AND MONITORING
 
+# Addes so our logs get added
+source ../loggerUnified.sh
+create_log
+
 echo "Starting system hardening..."
 
 # ========================================
