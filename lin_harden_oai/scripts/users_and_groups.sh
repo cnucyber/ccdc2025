@@ -51,7 +51,7 @@ users_groups() {
     found=false
      for user in "${user_list[@]}"; do
       echo "Account: $account, User: $user,"
-      if [ "$account" = "$user" ] && [ "$(whoami)" != "$account" ]; then
+      if [ "$account" = "$user" ] && [ "$(whoami)" != "$user" ]; then
         found=true
         break
       fi
@@ -69,3 +69,4 @@ users_groups() {
 
 
 }
+users_groups
