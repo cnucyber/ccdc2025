@@ -69,26 +69,60 @@ read -p "Enter the IP address of the Splunk server: " splunk_server_ip
 
 # 7. Configure the Forwarder to Send Logs
 echo "Configuring Splunk Forwarder inputs..."
-
 cat <<EOL > /opt/splunkforwarder/etc/system/local/inputs.conf
-[monitor:///var/log/syslog]
-disabled = false
-index = os_logs
 
 [monitor:///var/log/auth.log]
 disabled = false
-index = auth_logs
+index = security
+sourcetype = linux_secure
 
-[monitor:///var/log/custom_logs/]
-disabled = false
-index = custom_logs
+[monitor:///var/log/syslog]
+index = system
+sourcetype = syslog
+
+[monitor:///var/log/kern.log]
+index = system
+sourcetype = kernel
+
+[monitor:///var/log/audit/audit.log]
+index = security
+sourcetype = auditd
+
+[monitor:///var/log/nginx/access.log]
+index = web
+sourcetype = nginx_access
+
+[monitor:///var/log/nginx/error.log]
+index = web
+sourcetype = nginx_error
+
+[monitor:///var/log/iptables.log]
+index = firewall
+sourcetype = iptables
+
+[monitor:///var/log/cron]
+index = system
+sourcetype = cron
 
 [monitor://${src_dir}/${host}.csv]
 disabled = false
-index = ${host}.csv
+index = csv_logs
+sourcetype = csv_data
 EOL
 
-# 8. Define the destination Splunk server with the user-provided IP
+# 8. Define props.conf for CSV field extraction
+echo "Configuring Splunk props for CSV parsing..."
+cat <<EOL > /opt/splunkforwarder/etc/system/local/props.conf
+[csv_data]
+INDEXED_EXTRACTIONS = csv
+FIELD_DELIMITER = ,
+HEADER_FIELD_LINE_NUMBER = 1
+TIMESTAMP_FIELDS = timestamp
+TIME_FORMAT = %Y-%m-%d %H:%M:%S
+SHOULD_LINEMERGE = false
+EOL
+
+# 9. Define the destination Splunk server with the user-provided IP
 echo "Configuring Splunk Forwarder outputs..."
 cat <<EOL > /opt/splunkforwarder/etc/system/local/outputs.conf
 [tcpout]
@@ -98,7 +132,7 @@ defaultGroup = default-autolb-group
 server = $splunk_server_ip:9997
 EOL
 
-# 9. Restart the Splunk Universal Forwarder to apply changes
+# 10. Restart the Splunk Universal Forwarder to apply changes
 echo "Restarting Splunk Universal Forwarder..."
 /opt/splunkforwarder/bin/splunk restart
 
