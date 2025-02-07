@@ -26,6 +26,7 @@ Videos
     - Kenerel hardning
     - Stop Common services
     - SSH harding
+- Find all default logs
 
 - ~Create one super script~ - Denied
 
