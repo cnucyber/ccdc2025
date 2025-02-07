@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 source "../../loggerUnified.sh"
 
 lock_users() {
