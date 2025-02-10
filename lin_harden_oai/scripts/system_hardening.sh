@@ -1,8 +1,54 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # SYSTEM HARDENING (Debian, Ubuntu, RHEL, CentOS, Fedora Compatible)
 
 echo "Starting system hardening..."
+
+kernel_settings() {
+  echo -e "Changing kernel settings"
+  sudo cp /etc/sysctl.conf /etc/sysctl.conf.beforevoidshield
+  # Looks slightly different base on kernel
+  sudo sed -i 's/net.ipv4.conf.all.forwarding=1/net.ipv4.conf.all.forwarding=0/' /etc/sysctl.conf
+  sudo sed -i 's/net.ipv4.ip_forward=1/net.ipv4.ip_forward=0/' /etc/sysctl.conf
+
+  # Martian logs
+  sudo sed -i 's/#net.ipv4.conf.all.log_martians = 1/net.ipv4.conf.all.log_martians=1/' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.icmp_ignore_bogus_error_responses=1' /etc/sysctl.conf
+
+  # Disable because no one use ivp6/because comps say to
+  sudo sed -i '$a net.ipv6.conf.all.disable_ipv6=1' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv6.conf.default.disable_ipv6=1' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv6.conf.lo.disable_ipv6=1' /etc/sysctl.conf
+
+  # Helps with man in the middle attacks
+  sudo sed -i '$a net.ipv4.conf.all.accept_redirects=0' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.accept_redirects=0' /etc/sysctl.conf
+  # Helps with spoofing
+  sudo sed -i '$a net.ipv4.conf.all.rp_filter=1' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.rp_filter=1' /etc/sysctl.conf
+  # Enable by default on modern os, only usefull in comps
+  sudo sed -i '$a kernel.exec-shield=1' /etc/sysctl.conf # Has been removed from rhel for awhile, but still works for comps
+  sudo sed -i '$a kernel.randomize_va_space=2' /etc/sysctl.conf
+
+  # Core dumps
+  sudo sed -i '$a fs.suid_dumpable=0' /etc/sysctl.conf
+  sudo sed -i '$a * hard core 0' /etc/security/limits.conf
+
+  # Got tired of documenting
+  sudo sed -i '$a net.ipv4.conf.all.send_redirects=0' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.send_redirects=0' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.all.accept_source_route=0' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.accept_source_route=0' /etc/sysctl.conf
+
+  sudo sed -i '$a net.ipv4.tcp_syncookies=1' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.tcp_rfc1337=1' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.accept_source_route=0' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.accept_source_route=0' /etc/sysctl.conf
+  sudo sed -i '$a net.ipv4.conf.default.accept_source_route=0' /etc/sysctl.conf
+  sudo sysctl -p
+}
+
+kernel_settings
 
 # Detect Package Manager
 if command -v apt-get &> /dev/null; then

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This is used for creating logs of what the script is doing.
 red_start="\033[31m"

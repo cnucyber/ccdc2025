@@ -22,10 +22,10 @@ Videos
     - ~Lock users~
     - ~Monitor for changes~
     - ~Makes copy as rpc11~ 
-- Merge main script from void shield into harding script
-    - Kenerel hardning
-    - Stop Common services
-    - SSH harding
+- [x] Merge main script from void shield into harding script
+    - ~Kenerel hardning~
+    - ~Stop Common services~
+    - ~SSH harding~
 - Find all default logs
 
 - ~Create one super script~ - Denied
