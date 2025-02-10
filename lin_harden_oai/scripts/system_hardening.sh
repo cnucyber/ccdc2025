@@ -50,6 +50,32 @@ kernel_settings() {
 
 kernel_settings
 
+stop_common_services() {
+  echo -e "Stopping unnecessary systemctl services"
+  sudo systemctl stop dovecot.service # Pop3
+  sudo systemctl stop openvpn.service
+  sudo systemctl stop cups.service
+  sudo systemctl stop avahi-daemon.service
+  sudo systemctl disable dovecot.service
+  sudo systemctl disable openvpn.service
+  sudo systemctl disable cups.service
+  sudo systemctl disable avahi-daemon.service
+}
+stop_common_services
+
+ssh_secure() {
+  echo -e "Securing and restarting ssh"
+  sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.beforevoidshield
+  sudo sed -i 's/#LogLevel INFO/LogLevel VERBOSE/' /etc/ssh/sshd_config
+  sudo sed -i 's/#SyslogFacility/SyslogFacility VERBOSE/' /etc/ssh/sshd_config
+  sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+  sudo sed -i 's/#StrictModes yes/StrictModes yes/' /etc/ssh/sshd_config
+  sudo sed -i 's/#IgnoreRhosts yes/IgnoreRhosts yes/' /etc/ssh/sshd_config
+  sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+  sudo systemctl restart sshd.service
+}
+ssh_secure
+
 # Detect Package Manager
 if command -v apt-get &> /dev/null; then
     PKG_MANAGER="apt-get"
