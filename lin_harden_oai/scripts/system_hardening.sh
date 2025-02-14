@@ -52,7 +52,7 @@ kernel_settings
 
 stop_common_services() {
   echo -e "Stopping unnecessary systemctl services"
-  sudo systemctl stop dovecot.service # Pop3
+  #sudo systemctl stop dovecot.service # Pop3
   sudo systemctl stop openvpn.service
   sudo systemctl stop cups.service
   sudo systemctl stop avahi-daemon.service
